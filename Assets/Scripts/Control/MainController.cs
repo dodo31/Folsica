@@ -10,6 +10,12 @@ public class MainController : MonoBehaviour
 
 	public BuildingPlacementController buildingPlacementController;
 
+	public PlayPauseButton playPauseButton;
+	public AccelerateButton accelerateButton;
+
+	private bool isPlaying;
+	private bool isAccelerated;
+
 	protected void Start()
 	{
 		InputController.OnBorderHit += CameraController.MoveLaterally;
@@ -19,11 +25,14 @@ public class MainController : MonoBehaviour
 		InputController.OnObjectBeginDrag += this.DispatchBeginDrag;
 		InputController.OnObjectDragged += this.DispatchDragging;
 		InputController.OnObjectEndDrag += this.DispatchEndDrag;
+
+		isPlaying = true;
+		isAccelerated = false;
 	}
 
 	protected void Update()
 	{
-
+		
 	}
 
 	private void HoveredObjectLogger(GameObject hoveredObject)
@@ -58,6 +67,39 @@ public class MainController : MonoBehaviour
 		case "Building":
 			buildingPlacementController.EndMove();
 			break;
+		}
+	}
+
+	public void TogglePlayPause()
+	{
+		if (isPlaying)
+		{
+			isPlaying = false;
+			playPauseButton.SetAsPlay();
+			accelerateButton.ToggleInterractable(false);
+		}
+		else
+		{
+			isPlaying = true;
+			playPauseButton.SetAsPause();
+			accelerateButton.ToggleInterractable(true);
+		}
+	}
+
+	public void ToggleAccelerate()
+	{
+		if (isAccelerated)
+		{
+			isAccelerated = false;
+			accelerateButton.SetAsNormal();
+		}
+		else
+		{
+			if (isPlaying)
+			{
+				isAccelerated = true;
+				accelerateButton.SetAsAccelerate();
+			}
 		}
 	}
 }
