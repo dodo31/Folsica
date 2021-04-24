@@ -4,13 +4,5 @@ using UnityEngine;
 
 public class TowerController : BuildingController
 {
-    protected new void Start()
-    {
-        
-    }
-
-    protected new void Update()
-    {
-        
-    }
+    
 }

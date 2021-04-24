@@ -32,7 +32,7 @@ public class MainController : MonoBehaviour
 
 	protected void Update()
 	{
-		
+
 	}
 
 	private void HoveredObjectLogger(GameObject hoveredObject)
@@ -42,9 +42,11 @@ public class MainController : MonoBehaviour
 
 	private void DispatchBeginDrag(GameObject draggedObject)
 	{
-		switch (InputController.ActiveObject.tag)
+		switch (draggedObject.tag)
 		{
 		case "Building":
+			BuildingController buildingController = draggedObject.GetComponent<BuildingController>();
+			buildingController.HighlightAsValid();
 			buildingPlacementController.StartMove(InputController.ActiveObject);
 			break;
 		}
@@ -52,7 +54,7 @@ public class MainController : MonoBehaviour
 
 	private void DispatchDragging(GameObject draggedObject)
 	{
-		switch (InputController.ActiveObject.tag)
+		switch (draggedObject.tag)
 		{
 		case "Building":
 			buildingPlacementController.refreshPosition();
@@ -62,9 +64,11 @@ public class MainController : MonoBehaviour
 
 	private void DispatchEndDrag(GameObject draggedObject)
 	{
-		switch (InputController.ActiveObject.tag)
+		switch (draggedObject.tag)
 		{
 		case "Building":
+			BuildingController buildingController = draggedObject.GetComponent<BuildingController>();
+			buildingController.HideHighlight();
 			buildingPlacementController.EndMove();
 			break;
 		}

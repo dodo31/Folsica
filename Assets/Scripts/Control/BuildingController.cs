@@ -1,16 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BuildingController : MonoBehaviour
+public abstract class BuildingController : HighlightableController
 {
-    protected void Start()
-    {
-        
-    }
-
-    protected void Update()
-    {
-        
-    }
+    
 }

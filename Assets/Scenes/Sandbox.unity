@@ -1406,6 +1406,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4effe92a89b65438c37324e9c81a95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ColorTemplate:
+    NeutralColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 0.49803922}
+    ValidColor: {r: 0, g: 1, b: 0, a: 0.49803922}
+    InvalidColor: {r: 1, g: 0, b: 0, a: 0.49803922}
+  HighlightMaterialPrefab: {fileID: 2100000, guid: c5f34a7629217e84ea3efcab1f61a2fc, type: 2}
 --- !u!4 &1402045414 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7e2289a935a90f747b034f823ab06cdc, type: 3}
