@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class MainController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public InputController InputController;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public CameraController CameraController;
+
+	protected void Start()
+	{
+		InputController.OnBorderHit += CameraController.MoveLaterally;
+        InputController.OnZoom += CameraController.SetZoom;
+	}
+
+	protected void Update()
+	{
+
+	}
 }
