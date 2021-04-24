@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BuildingPlacementController : MonoBehaviour
 {
-	public GameObject Grid;
+	public GridController Grid;
 
 	private GameObject HeldObject;
 
@@ -34,7 +34,13 @@ public class BuildingPlacementController : MonoBehaviour
 	{
 		Vector2 mouseScreenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 		Vector2 newObjectScreenPosition = mouseScreenPosition + deltaFromObject;
-		HeldObject.transform.position = this.PointedPosition(newObjectScreenPosition);
+
+		Vector3 newObjectPosition = this.PointedPosition(newObjectScreenPosition);
+
+		if (newObjectPosition.x != float.NegativeInfinity)
+		{
+			HeldObject.transform.position = Grid.FreePositionToGridPosition(newObjectPosition);
+		}
 	}
 
 	public void EndMove()
