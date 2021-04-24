@@ -12,7 +12,7 @@ public class GridController : MonoBehaviour
 
 	private CellController cellController;
 
-	protected void Start()
+	protected void Awake()
 	{
 		size = this.ComputeSize();
 

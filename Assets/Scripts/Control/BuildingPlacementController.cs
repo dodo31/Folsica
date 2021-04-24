@@ -7,6 +7,8 @@ public class BuildingPlacementController : MonoBehaviour
 {
 	public GridController Grid;
 
+	public Transform Environement;
+
 	private GameObject HeldObject;
 
 	private Vector2 deltaFromObject;
@@ -17,6 +19,19 @@ public class BuildingPlacementController : MonoBehaviour
 	{
 		deltaFromObject = Vector2.zero;
 		isMovingObject = false;
+	}
+
+	public void AddBuilding(GameObject buildingPrefab)
+	{
+		GameObject newBuilding = Instantiate<GameObject>(buildingPrefab);
+		Vector2 spawnPosition = Input.mousePosition - new Vector3(0, 20, 0);
+		newBuilding.transform.position = this.PointedPosition(spawnPosition);
+		newBuilding.transform.SetParent(Environement);
+
+		BuildingController newBuildingController = newBuilding.GetComponent<BuildingController>();
+		newBuildingController.HighlightAsNeutral();
+
+		this.StartMove(newBuilding);
 	}
 
 	public void StartMove(GameObject objectToMove)

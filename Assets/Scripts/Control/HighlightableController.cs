@@ -11,7 +11,7 @@ public abstract class HighlightableController : MonoBehaviour
 
 	private MeshRenderer meshRenderer;
 
-	protected void Start()
+	protected void Awake()
 	{
 		meshRenderer = this.GetComponent<MeshRenderer>();
 	}

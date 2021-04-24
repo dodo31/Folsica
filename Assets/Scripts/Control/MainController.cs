@@ -8,13 +8,9 @@ public class MainController : MonoBehaviour
 
 	public CameraController CameraController;
 
+	public TimeController TimeController;
+
 	public BuildingPlacementController buildingPlacementController;
-
-	public PlayPauseButton playPauseButton;
-	public AccelerateButton accelerateButton;
-
-	private bool isPlaying;
-	private bool isAccelerated;
 
 	protected void Start()
 	{
@@ -22,22 +18,35 @@ public class MainController : MonoBehaviour
 		InputController.OnZoom += CameraController.SetZoom;
 
 		InputController.OnObjectHovered += this.HoveredObjectLogger;
+		InputController.OnObjectClicked += this.DispatchObjectClicked;
 		InputController.OnObjectBeginDrag += this.DispatchBeginDrag;
 		InputController.OnObjectDragged += this.DispatchDragging;
 		InputController.OnObjectEndDrag += this.DispatchEndDrag;
-
-		isPlaying = true;
-		isAccelerated = false;
 	}
 
 	protected void Update()
 	{
-
+		if (buildingPlacementController.IsMovingObject())
+		{
+			buildingPlacementController.refreshPosition();
+		}
 	}
 
 	private void HoveredObjectLogger(GameObject hoveredObject)
 	{
 		// Debug.Log(hoveredObject.name);
+	}
+
+	private void DispatchObjectClicked(GameObject clickedObject)
+	{
+		switch (clickedObject.tag)
+		{
+		case "Building":
+			BuildingController buildingController = clickedObject.GetComponent<BuildingController>();
+			buildingController.HighlightAsNeutral();
+			buildingPlacementController.StartMove(InputController.ActiveObject);
+			break;
+		}
 	}
 
 	private void DispatchBeginDrag(GameObject draggedObject)
@@ -46,7 +55,7 @@ public class MainController : MonoBehaviour
 		{
 		case "Building":
 			BuildingController buildingController = draggedObject.GetComponent<BuildingController>();
-			buildingController.HighlightAsValid();
+			buildingController.HighlightAsNeutral();
 			buildingPlacementController.StartMove(InputController.ActiveObject);
 			break;
 		}
@@ -54,12 +63,7 @@ public class MainController : MonoBehaviour
 
 	private void DispatchDragging(GameObject draggedObject)
 	{
-		switch (draggedObject.tag)
-		{
-		case "Building":
-			buildingPlacementController.refreshPosition();
-			break;
-		}
+		
 	}
 
 	private void DispatchEndDrag(GameObject draggedObject)
@@ -71,39 +75,6 @@ public class MainController : MonoBehaviour
 			buildingController.HideHighlight();
 			buildingPlacementController.EndMove();
 			break;
-		}
-	}
-
-	public void TogglePlayPause()
-	{
-		if (isPlaying)
-		{
-			isPlaying = false;
-			playPauseButton.SetAsPlay();
-			accelerateButton.ToggleInterractable(false);
-		}
-		else
-		{
-			isPlaying = true;
-			playPauseButton.SetAsPause();
-			accelerateButton.ToggleInterractable(true);
-		}
-	}
-
-	public void ToggleAccelerate()
-	{
-		if (isAccelerated)
-		{
-			isAccelerated = false;
-			accelerateButton.SetAsNormal();
-		}
-		else
-		{
-			if (isPlaying)
-			{
-				isAccelerated = true;
-				accelerateButton.SetAsAccelerate();
-			}
 		}
 	}
 }
