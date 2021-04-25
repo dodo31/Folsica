@@ -4,13 +4,5 @@ using UnityEngine;
 
 public class PathPointController : MonoBehaviour
 {
-	protected void Start()
-	{
-
-	}
-
-	protected void Update()
-	{
-
-	}
+	public float Radius = 0.01f;
 }
