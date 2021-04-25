@@ -9,70 +9,89 @@ public abstract class HighlightableController : MonoBehaviour
 
 	public Material HighlightMaterialPrefab;
 
-	private MeshRenderer meshRenderer;
-
-	protected void Awake()
-	{
-		meshRenderer = this.GetComponent<MeshRenderer>();
-	}
-
 	public void HighlightAsNeutral()
 	{
-		Material newHighlightMaterial = this.ShowHighlight();
-		newHighlightMaterial.color = ColorTemplate.NeutralColor;
+		Material[] newHighlightMaterial = this.ShowHighlight();
+		this.SetHightlightColor(newHighlightMaterial, ColorTemplate.NeutralColor);
 	}
 
 	public void HighlightAsValid()
 	{
-		Material newHighlightMaterial = this.ShowHighlight();
-		newHighlightMaterial.color = ColorTemplate.ValidColor;
+		Material[] newHighlightMaterials = this.ShowHighlight();
+		this.SetHightlightColor(newHighlightMaterials, ColorTemplate.ValidColor);
 	}
 
 	public void HighlightAsInvalid()
 	{
-		Material newHighlightmaterial = this.ShowHighlight();
-		newHighlightmaterial.color = ColorTemplate.InvalidColor;
+		Material[] newHighlightmaterials = this.ShowHighlight();
+		this.SetHightlightColor(newHighlightmaterials, ColorTemplate.InvalidColor);
 	}
 
-	private Material ShowHighlight()
+	private void SetHightlightColor(Material[] highlightMaterials, Color color)
 	{
-		Material highlightMaterial = this.FindHighlightMaterial();
-
-		if (highlightMaterial == null)
+		foreach (Material highlightMaterial in highlightMaterials)
 		{
-			highlightMaterial = this.AddHighlightMaterial();
+			highlightMaterial.color = color;
+		}
+	}
+
+	private Material[] ShowHighlight()
+	{
+		MeshRenderer[] meshRenderers = this.GetComponentsInChildren<MeshRenderer>();
+		List<Material> highlightMaterials = new List<Material>();
+
+		foreach (MeshRenderer meshRenderer in meshRenderers)
+		{
+			Material highlightMaterial = this.FindHighlightMaterial(meshRenderer);
+
+			if (highlightMaterial == null)
+			{
+				highlightMaterial = this.AddHighlightMaterial();
+			}
+
+			highlightMaterials.Add(highlightMaterial);
 		}
 
-		return highlightMaterial;
+		return highlightMaterials.ToArray();
 	}
 
 	private Material AddHighlightMaterial()
 	{
-		List<Material> newMaterials = new List<Material>(meshRenderer.materials);
+		MeshRenderer[] meshRenderers = this.GetComponentsInChildren<MeshRenderer>();
 		Material highlightMaterial = Instantiate<Material>(HighlightMaterialPrefab);
-		newMaterials.Add(highlightMaterial);
-		meshRenderer.materials = newMaterials.ToArray();
+
+		foreach (MeshRenderer meshRenderer in meshRenderers)
+		{
+			List<Material> newMaterials = new List<Material>(meshRenderer.materials);
+			newMaterials.Add(highlightMaterial);
+			meshRenderer.materials = newMaterials.ToArray();
+		}
+
 		return highlightMaterial;
 	}
 
 	public void HideHighlight()
 	{
-		List<Material> newMaterials = new List<Material>();
+		MeshRenderer[] meshRenderers = this.GetComponentsInChildren<MeshRenderer>();
 
-		Material highlightMaterial = this.FindHighlightMaterial();
-
-		foreach (Material material in meshRenderer.materials)
+		foreach (MeshRenderer meshRenderer in meshRenderers)
 		{
-			if (material != highlightMaterial)
-			{
-				newMaterials.Add(material);
-			}
-		}
+			List<Material> newMaterials = new List<Material>();
+			Material highlightMaterial = this.FindHighlightMaterial(meshRenderer);
 
-		meshRenderer.materials = newMaterials.ToArray();
+			foreach (Material material in meshRenderer.materials)
+			{
+				if (material != highlightMaterial)
+				{
+					newMaterials.Add(material);
+				}
+			}
+
+			meshRenderer.materials = newMaterials.ToArray();
+		}
 	}
 
-	private Material FindHighlightMaterial()
+	private Material FindHighlightMaterial(MeshRenderer meshRenderer)
 	{
 		return Array.Find(meshRenderer.materials, (material) =>
 		{

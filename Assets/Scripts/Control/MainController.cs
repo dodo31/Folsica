@@ -42,7 +42,7 @@ public class MainController : MonoBehaviour
 		switch (clickedObject.tag)
 		{
 		case "Building":
-			BuildingController buildingController = clickedObject.GetComponent<BuildingController>();
+			BuildingController buildingController = clickedObject.GetComponentInParent<BuildingController>();
 
 			if (buildingsController.IsMovingObject())
 			{
@@ -50,13 +50,13 @@ public class MainController : MonoBehaviour
 				buildingsController.EndMove();
 			}
 
-			buildingsController.ShowBuildingMenu(buildingController);
+			buildingsController.SelectBuildingMenu(buildingController);
 			break;
 		case "Ground":
-			buildingsController.HideAllBuildingMenues();
+			buildingsController.UnselectAllBuildingMenues();
 			break;
 		case "Grid":
-			buildingsController.HideAllBuildingMenues();
+			buildingsController.UnselectAllBuildingMenues();
 			break;
 		}
 	}
@@ -66,7 +66,7 @@ public class MainController : MonoBehaviour
 		switch (draggedObject.tag)
 		{
 		case "Building":
-			BuildingController buildingController = draggedObject.GetComponent<BuildingController>();
+			BuildingController buildingController = draggedObject.GetComponentInParent<BuildingController>();
 			buildingController.HighlightAsNeutral();
 			buildingsController.StartMove(InputController.ActiveObject);
 			break;
@@ -83,7 +83,7 @@ public class MainController : MonoBehaviour
 		switch (draggedObject.tag)
 		{
 		case "Building":
-			BuildingController buildingController = draggedObject.GetComponent<BuildingController>();
+			BuildingController buildingController = draggedObject.GetComponentInParent<BuildingController>();
 			buildingController.HideHighlight();
 			buildingsController.EndMove();
 			break;

@@ -10,7 +10,9 @@ public class BuildingsController : MonoBehaviour
 
 	public Transform Environement;
 
-	private BuildingController HeldBuilding;
+	private BuildingController selectedBuilding;
+
+	private BuildingController heldBuilding;
 
 	private Vector3 deltaFromObject;
 
@@ -20,6 +22,9 @@ public class BuildingsController : MonoBehaviour
 
 	protected void Start()
 	{
+		selectedBuilding = null;
+		heldBuilding = null;
+
 		deltaFromObject = Vector3.zero;
 		isMovingObject = false;
 
@@ -37,9 +42,15 @@ public class BuildingsController : MonoBehaviour
 		newBuilding.transform.position = this.PointedPosition(spawnScreenPosition);
 		newBuilding.transform.SetParent(Environement);
 
-		BuildingController newBuildingController = newBuilding.GetComponent<BuildingController>();
+		BuildingController newBuildingController = newBuilding.GetComponentInParent<BuildingController>();
 		newBuildingController.HighlightAsNeutral();
-		this.HideAllBuildingMenues();
+		this.UnselectAllBuildingMenues();
+
+		selectedBuilding = newBuildingController;
+
+		this.UpgradeTowerBase("Placeholder/");
+		this.UpgradeTowerCore("Placeholder/");
+		this.UpgradeTowerHead("Placeholder/");
 
 		this.StartMove(newBuilding);
 	}
@@ -49,15 +60,55 @@ public class BuildingsController : MonoBehaviour
 		this.DestroyBuilding(building);
 	}
 
+	public void UpgradeTowerBase(string towerPath)
+	{
+		if (selectedBuilding is TowerController selectedTower)
+		{
+			GameObject basePrefab = this.LoadTowerStage(towerPath + "Base");
+			selectedTower.SetBase(basePrefab);
+		}
+	}
+
+	public void UpgradeTowerCore(string towerPath)
+	{
+		if (selectedBuilding is TowerController selectedTower)
+		{
+			GameObject corePrefab = this.LoadTowerStage(towerPath + "Core");
+			selectedTower.SetCore(corePrefab);
+		}
+	}
+
+	public void UpgradeTowerHead(string towerPath)
+	{
+		if (selectedBuilding is TowerController selectedTower)
+		{
+			GameObject headPrefab = this.LoadTowerStage(towerPath + "Head");
+			selectedTower.SetHead(headPrefab);
+		}
+	}
+
+	private GameObject LoadTowerStage(string stageLocalPath)
+	{
+		GameObject baseStagePrefab = Resources.Load<GameObject>("Models/Buildings/Towers/" + stageLocalPath);
+		GameObject baseStage = Instantiate<GameObject>(baseStagePrefab);
+
+		baseStage.transform.position = Vector3.zero;
+		baseStage.transform.localScale = Vector3.one;
+
+		Debug.LogFormat(baseStage.name);
+
+		return baseStage;
+	}
+
 	public void StartMove(GameObject objectToMove)
 	{
-		HeldBuilding = objectToMove.GetComponent<BuildingController>();
+		heldBuilding = objectToMove.GetComponentInParent<BuildingController>();
 
-		Vector3 objectScreenPosition = Camera.main.WorldToScreenPoint(HeldBuilding.transform.position);
+		Vector3 objectScreenPosition = Camera.main.WorldToScreenPoint(heldBuilding.transform.position);
 		Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
 		deltaFromObject = objectScreenPosition - mouseScreenPosition;
 
-		this.HideAllBuildingMenues();
+		this.UnselectAllBuildingMenues();
 		Grid.gameObject.SetActive(true);
 
 		isMovingObject = true;
@@ -73,24 +124,24 @@ public class BuildingsController : MonoBehaviour
 		if (newObjectPosition.x != float.NegativeInfinity)
 		{
 			Vector3 buildingGridPosition = Grid.FreePositionToGridPosition(newObjectPosition);
-			HeldBuilding.transform.position = buildingGridPosition;
+			heldBuilding.transform.position = buildingGridPosition;
 
-			if (this.IsBuildingColliding(HeldBuilding))
+			if (this.IsBuildingColliding(heldBuilding))
 			{
-				HeldBuilding.HighlightAsInvalid();
+				heldBuilding.HighlightAsInvalid();
 			}
 			else
 			{
-				HeldBuilding.HighlightAsNeutral();
+				heldBuilding.HighlightAsNeutral();
 			}
 		}
 	}
 
 	public void EndMove()
 	{
-		Vector3 objectGridPosition = Grid.FreePositionToGridPosition(HeldBuilding.transform.position);
+		Vector3 objectGridPosition = Grid.FreePositionToGridPosition(heldBuilding.transform.position);
 
-		if (!this.IsBuildingColliding(HeldBuilding))
+		if (!this.IsBuildingColliding(heldBuilding))
 		{
 			this.PlaceBuilding(objectGridPosition);
 		}
@@ -105,32 +156,32 @@ public class BuildingsController : MonoBehaviour
 
 	private void PlaceBuilding(Vector3 objectGridPosition)
 	{
-		if (!buildingGridPositions.ContainsKey(HeldBuilding))
+		if (!buildingGridPositions.ContainsKey(heldBuilding))
 		{
-			buildingGridPositions.Add(HeldBuilding, objectGridPosition);
+			buildingGridPositions.Add(heldBuilding, objectGridPosition);
 		}
 		else
 		{
-			buildingGridPositions[HeldBuilding] = objectGridPosition;
+			buildingGridPositions[heldBuilding] = objectGridPosition;
 		}
 	}
 
 	public void CancelPlacement()
 	{
-		if (buildingGridPositions.ContainsKey(HeldBuilding))
+		if (buildingGridPositions.ContainsKey(heldBuilding))
 		{
-			HeldBuilding.transform.position = buildingGridPositions[HeldBuilding];
+			heldBuilding.transform.position = buildingGridPositions[heldBuilding];
 		}
 		else
 		{
-			this.DestroyBuilding(HeldBuilding);
+			this.DestroyBuilding(heldBuilding);
 		}
 	}
 
 	private void DestroyBuilding(BuildingController building)
 	{
 		DestroyImmediate(building.gameObject);
-		HeldBuilding = null;
+		heldBuilding = null;
 	}
 
 	private Vector3 PointedPosition(Vector3 screenPosition)
@@ -162,24 +213,21 @@ public class BuildingsController : MonoBehaviour
 		return isMovingObject;
 	}
 
-	public void ShowBuildingMenu(BuildingController buildingController)
+	public void SelectBuildingMenu(BuildingController buildingController)
 	{
-		this.HideAllBuildingMenues();
+		this.UnselectAllBuildingMenues();
 		buildingController.ToggleMenu(true);
+		selectedBuilding = buildingController;
 	}
 
-	public void HideBuildingMenu(BuildingController buildingController)
-	{
-		this.HideAllBuildingMenues();
-		buildingController.ToggleMenu(true);
-	}
-
-	public void HideAllBuildingMenues()
+	public void UnselectAllBuildingMenues()
 	{
 		foreach (BuildingController buildingController in buildingGridPositions.Keys)
 		{
 			buildingController.ToggleMenu(false);
 		}
+
+		selectedBuilding = null;
 	}
 
 	private bool IsBuildingColliding(BuildingController building)
