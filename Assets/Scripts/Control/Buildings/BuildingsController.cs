@@ -95,8 +95,6 @@ public class BuildingsController : MonoBehaviour
 		baseStage.transform.position = Vector3.zero;
 		baseStage.transform.localScale = Vector3.one;
 
-		Debug.LogFormat(baseStage.name);
-
 		return baseStage;
 	}
 
