@@ -1,3 +1,4 @@
+using System.Threading;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,6 +43,11 @@ public class BuildingPlacementController : MonoBehaviour
 		this.StartMove(newBuilding);
 	}
 
+	public void RemoveBuilding(BuildingController building)
+	{
+		this.DestroyBuilding(building);
+	}
+
 	public void StartMove(GameObject objectToMove)
 	{
 		HeldBuilding = objectToMove.GetComponent<BuildingController>();
@@ -82,6 +88,21 @@ public class BuildingPlacementController : MonoBehaviour
 	{
 		Vector3 objectGridPosition = Grid.FreePositionToGridPosition(HeldBuilding.transform.position);
 
+		if (!this.IsBuildingColliding(HeldBuilding))
+		{
+			this.PlaceBuilding(objectGridPosition);
+		}
+		else
+		{
+			this.CancelPlacement();
+		}
+
+		Grid.gameObject.SetActive(false);
+		isMovingObject = false;
+	}
+
+	private void PlaceBuilding(Vector3 objectGridPosition)
+	{
 		if (!buildingGridPositions.ContainsKey(HeldBuilding))
 		{
 			buildingGridPositions.Add(HeldBuilding, objectGridPosition);
@@ -90,9 +111,24 @@ public class BuildingPlacementController : MonoBehaviour
 		{
 			buildingGridPositions[HeldBuilding] = objectGridPosition;
 		}
+	}
 
-		Grid.gameObject.SetActive(false);
-		isMovingObject = false;
+	public void CancelPlacement()
+	{
+		if (buildingGridPositions.ContainsKey(HeldBuilding))
+		{
+			HeldBuilding.transform.position = buildingGridPositions[HeldBuilding];
+		}
+		else
+		{
+			this.DestroyBuilding(HeldBuilding);
+		}
+	}
+
+	private void DestroyBuilding(BuildingController building)
+	{
+		DestroyImmediate(building.gameObject);
+		HeldBuilding = null;
 	}
 
 	private Vector3 PointedPosition(Vector3 screenPosition)
@@ -156,7 +192,7 @@ public class BuildingPlacementController : MonoBehaviour
 						if (isFilledPlaced)
 						{
 							Vector3 cellPositionPlaced = positionPlaced + new Vector3(colPlaced, 0, -rowPlaced);
-							
+
 							for (int rowOther = 0; rowOther < rowCountOther; rowOther++)
 							{
 								for (int colOther = 0; colOther < colCountOther; colOther++)
