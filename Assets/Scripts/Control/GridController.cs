@@ -49,6 +49,6 @@ public class GridController : MonoBehaviour
 		Vector3 positionFromCorner = position + Vector3.one * size * 0.5f;
 		float rowIndex = Mathf.Floor(positionFromCorner.y) + 0.5f;
 		float colIndex = Mathf.Floor(positionFromCorner.x) + 0.5f;
-		return new Vector3(colIndex, rowIndex);
+		return new Vector3(rowIndex, colIndex);
 	}
 }
