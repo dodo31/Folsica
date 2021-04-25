@@ -13,4 +13,11 @@ public abstract class BuildingController : HighlightableController
 	[HideInInspector]
 	[SerializeField]
 	public BuildingFootprintRow[] FootprintRows;
+
+	public Canvas ContextualUi;
+
+	public void ToggleMenu(bool showMenu)
+	{
+		ContextualUi.gameObject.SetActive(showMenu);
+	}
 }

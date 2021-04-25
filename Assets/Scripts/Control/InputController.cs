@@ -101,10 +101,18 @@ public class InputController : MonoBehaviour
 
 			EventSystem eventSystem = EventSystem.current;
 
-			if (distanceFromClick < eventSystem.pixelDragThreshold)
+			if (Input.GetMouseButtonUp(0))
 			{
-				OnObjectBeginDrag.Invoke(activeObject);
-				mouseState = MouseState.DRAGGING;
+				OnObjectClicked.Invoke(activeObject);
+				mouseState = MouseState.INACTIVE;
+			}
+			else
+			{
+				if (distanceFromClick >= eventSystem.pixelDragThreshold)
+				{
+					OnObjectBeginDrag.Invoke(activeObject);
+					mouseState = MouseState.DRAGGING;
+				}
 			}
 			break;
 		case MouseState.DRAGGING:

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingPlacementController : MonoBehaviour
+public class BuildingsController : MonoBehaviour
 {
 	public GridController Grid;
 
@@ -39,6 +39,7 @@ public class BuildingPlacementController : MonoBehaviour
 
 		BuildingController newBuildingController = newBuilding.GetComponent<BuildingController>();
 		newBuildingController.HighlightAsNeutral();
+		this.HideAllBuildingMenues();
 
 		this.StartMove(newBuilding);
 	}
@@ -56,6 +57,7 @@ public class BuildingPlacementController : MonoBehaviour
 		Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
 		deltaFromObject = objectScreenPosition - mouseScreenPosition;
 
+		this.HideAllBuildingMenues();
 		Grid.gameObject.SetActive(true);
 
 		isMovingObject = true;
@@ -158,6 +160,26 @@ public class BuildingPlacementController : MonoBehaviour
 	public bool IsMovingObject()
 	{
 		return isMovingObject;
+	}
+
+	public void ShowBuildingMenu(BuildingController buildingController)
+	{
+		this.HideAllBuildingMenues();
+		buildingController.ToggleMenu(true);
+	}
+
+	public void HideBuildingMenu(BuildingController buildingController)
+	{
+		this.HideAllBuildingMenues();
+		buildingController.ToggleMenu(true);
+	}
+
+	public void HideAllBuildingMenues()
+	{
+		foreach (BuildingController buildingController in buildingGridPositions.Keys)
+		{
+			buildingController.ToggleMenu(false);
+		}
 	}
 
 	private bool IsBuildingColliding(BuildingController building)

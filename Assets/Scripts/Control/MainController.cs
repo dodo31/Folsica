@@ -10,7 +10,7 @@ public class MainController : MonoBehaviour
 
 	public TimeController TimeController;
 
-	public BuildingPlacementController buildingPlacementController;
+	public BuildingsController buildingsController;
 
 	protected void Start()
 	{
@@ -26,9 +26,9 @@ public class MainController : MonoBehaviour
 
 	protected void Update()
 	{
-		if (buildingPlacementController.IsMovingObject())
+		if (buildingsController.IsMovingObject())
 		{
-			buildingPlacementController.refreshPosition();
+			buildingsController.refreshPosition();
 		}
 	}
 
@@ -43,8 +43,20 @@ public class MainController : MonoBehaviour
 		{
 		case "Building":
 			BuildingController buildingController = clickedObject.GetComponent<BuildingController>();
-			buildingController.HighlightAsNeutral();
-			buildingPlacementController.StartMove(InputController.ActiveObject);
+
+			if (buildingsController.IsMovingObject())
+			{
+				buildingController.HideHighlight();
+				buildingsController.EndMove();
+			}
+
+			buildingsController.ShowBuildingMenu(buildingController);
+			break;
+		case "Ground":
+			buildingsController.HideAllBuildingMenues();
+			break;
+		case "Grid":
+			buildingsController.HideAllBuildingMenues();
 			break;
 		}
 	}
@@ -56,14 +68,14 @@ public class MainController : MonoBehaviour
 		case "Building":
 			BuildingController buildingController = draggedObject.GetComponent<BuildingController>();
 			buildingController.HighlightAsNeutral();
-			buildingPlacementController.StartMove(InputController.ActiveObject);
+			buildingsController.StartMove(InputController.ActiveObject);
 			break;
 		}
 	}
 
 	private void DispatchDragging(GameObject draggedObject)
 	{
-		
+
 	}
 
 	private void DispatchEndDrag(GameObject draggedObject)
@@ -73,7 +85,7 @@ public class MainController : MonoBehaviour
 		case "Building":
 			BuildingController buildingController = draggedObject.GetComponent<BuildingController>();
 			buildingController.HideHighlight();
-			buildingPlacementController.EndMove();
+			buildingsController.EndMove();
 			break;
 		}
 	}
