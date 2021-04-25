@@ -96,11 +96,6 @@ public class PathController : MonoBehaviour
 				Gizmos.DrawSphere(pointCurrent.transform.position, 0.2f);
 				Gizmos.DrawLine(pointCurrent.transform.position, pointNext.transform.position);
 
-				Vector3 delta = pointNext.transform.position - pointCurrent.transform.position;
-				Vector3 perpDirection = new Vector3(delta.z, 0, -delta.x).normalized;
-
-				Gizmos.DrawLine(pointCurrent.transform.position, pointCurrent.transform.position + delta);
-
 				if (i == Points.Length - 2)
 				{
 					Gizmos.DrawSphere(pointNext.transform.position, 0.2f);

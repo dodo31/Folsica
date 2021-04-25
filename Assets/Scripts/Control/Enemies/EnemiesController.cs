@@ -17,13 +17,13 @@ public class EnemiesController : MonoBehaviour
 
 	private void LateUpdate()
 	{
-        this.SpwanEnemy();
+        // this.SpwanEnemy();
 	}
 
 	public void SpwanEnemy()
 	{
 		GameObject newEnemyObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		newEnemyObject.transform.localScale = Vector3.one * 0.05f;
+		newEnemyObject.transform.localScale = new Vector3(0.1f, 0.05f, 0.05f);
 		newEnemyObject.transform.SetParent(Environement.transform);
 
 		EnemyController newEnemy = newEnemyObject.AddComponent<EnemyController>();

@@ -1,7 +1,12 @@
+using System;
 using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
-	public float velocity = 1;
+	public float Velocity = 0.0035f;
+
+	public float AngularVelocity = 0.01f;
+
+	private Vector3 lastPosition;
 
 	private StepPoint[] stepPoints;
 
@@ -9,6 +14,7 @@ public class EnemyController : MonoBehaviour
 
 	private void Awake()
 	{
+		lastPosition = Vector3.zero;
 		stepPoints = new StepPoint[0];
 		stepPointToReach = null;
 	}
@@ -17,16 +23,36 @@ public class EnemyController : MonoBehaviour
 	{
 		stepPoints = newStepPoints;
 		stepPointToReach = stepPoints[0];
+
+		Vector3 deltaToStep = stepPointToReach.Position - transform.position;
+		lastPosition = transform.position - deltaToStep.normalized * Velocity;
 	}
 
 	protected void FixedUpdate()
 	{
 		if (!this.AllStepsCompleted())
 		{
-			Vector3 deltaToStep = stepPointToReach.Position - transform.position;
-			Vector3 direction = deltaToStep.normalized;
+			Vector3 currentSpeed = transform.position - lastPosition;
 
-			transform.position += direction * 0.035f;
+			Vector3 currentDirection = currentSpeed.normalized;
+
+			Vector3 deltaToStep = stepPointToReach.Position - transform.position;
+			Vector3 targetDirection = deltaToStep.normalized;
+
+			float currentAngle = Mathf.Atan2(currentDirection.z, currentDirection.x);
+			float targetAngle = Mathf.Atan2(targetDirection.z, targetDirection.x);
+
+			float angleDelta = this.angleDelta(currentAngle, targetAngle);
+			float angleIncrement = Mathf.Sign(angleDelta) * Mathf.Min(Mathf.Abs(angleDelta), AngularVelocity);
+			float newAngle = currentAngle + angleIncrement;
+
+			float newDirX = Mathf.Cos(newAngle);
+			float newDirY = Mathf.Sin(newAngle);
+			Vector3 newDirection = new Vector3(newDirX, 0, newDirY);
+
+			lastPosition = transform.position;
+			transform.position += newDirection * Velocity;
+			transform.localRotation = Quaternion.Euler(0, -newAngle * Mathf.Rad2Deg, 0);
 
 			if (this.DistanceFromStep() < 0.1f)
 			{
@@ -76,5 +102,22 @@ public class EnemyController : MonoBehaviour
 		}
 
 		return allCompleted;
+	}
+
+	private float angleDelta(float angle1, float angle2)
+	{
+		float angleDeltaRaw = angle2 - angle1;
+
+		while (angleDeltaRaw < -Mathf.PI)
+		{
+			angleDeltaRaw += Mathf.PI * 2;
+		}
+
+		while (angleDeltaRaw > Mathf.PI)
+		{
+			angleDeltaRaw -= Mathf.PI * 2;
+		}
+
+		return angleDeltaRaw;
 	}
 }
