@@ -568,10 +568,12 @@ MonoBehaviour:
   - cells: 0100
   - cells: 0001
   BuildingUi: {fileID: 2175134873586937121}
+  RotationSpeed: 0.1
   Base: {fileID: 0}
   Core: {fileID: 0}
   Head: {fileID: 0}
   SellButton: {fileID: 1289936142}
+  SellAmout: {fileID: 866428165}
 --- !u!1001 &23205099
 PrefabInstance:
   m_ObjectHideFlags: 0

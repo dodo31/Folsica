@@ -11,9 +11,9 @@ public class TowerHeadRobotBasicalController : TowerHeadController
 		lastTargetAngle = 0;
 	}
 
-	public Vector3 SelectTargetDirection(float range)
+	public override Vector3 SelectTargetDirection(float range)
 	{
-		float currentTargetAngle = lastTargetAngle + Mathf.PI / 4f;
+		float currentTargetAngle = lastTargetAngle - Mathf.PI / 4f;
 		lastTargetAngle = currentTargetAngle;
 
 		float directionX = Mathf.Cos(currentTargetAngle);

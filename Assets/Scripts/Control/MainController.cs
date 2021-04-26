@@ -18,6 +18,10 @@ public class MainController : MonoBehaviour
 	{
 		InputController.OnBorderHit += CameraController.MoveLaterally;
 		InputController.OnZoom += CameraController.SetZoom;
+		InputController.OnZoom += (int direction) =>
+		{
+			buildingsController.UnselectAllBuildingMenues();
+		};
 
 		InputController.OnObjectHovered += this.HoveredObjectLogger;
 		InputController.OnObjectClicked += this.DispatchObjectClicked;

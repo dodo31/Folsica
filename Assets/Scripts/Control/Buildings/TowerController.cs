@@ -7,12 +7,22 @@ using UnityEngine.UI;
 public class TowerController : BuildingController
 {
 	private const string TOWERS_PATH = "Models/Buildings/Towers/";
+	public float RotationSpeed = 0.01f;
 
 	public TowerBaseController Base;
 	public TowerCoreController Core;
 	public TowerHeadController Head;
 
 	public Button SellButton;
+
+	public Text SellAmout;
+
+	private float lastFireTime;
+
+	private float currentAngle;
+	private Vector3 targetDirection;
+
+	private GeometryHelper geometryHelper;
 
 	protected void Awake()
 	{
@@ -25,6 +35,13 @@ public class TowerController : BuildingController
 		this.BindUpgradesToButtons(BuildingUi.UpgradePanelBase, this.UpgradeTowerBase);
 		this.BindUpgradesToButtons(BuildingUi.UpgradePanelCore, this.UpgradeTowerCore);
 		this.BindUpgradesToButtons(BuildingUi.UpgradePanelHead, this.UpgradeTowerHead);
+
+		lastFireTime = Time.time;
+
+		currentAngle = 0;
+		targetDirection = Vector3.positiveInfinity;
+
+		geometryHelper = new GeometryHelper();
 	}
 
 	private void BindUpgradesToButtons(GameObject stagePanel, Action<Sprite, Color, GameObject> actionToBind)
@@ -39,7 +56,89 @@ public class TowerController : BuildingController
 
 	protected void LateUpdate()
 	{
+		float currentTime = Time.time;
 
+		if (currentTime - lastFireTime > this.TotalCadence())
+		{
+			// Fire
+
+			targetDirection = Head.SelectTargetDirection(this.TotalRange());
+
+			if (targetDirection.x != float.PositiveInfinity)
+			{
+				this.RefreshGunDirection(targetDirection);
+			}
+
+			lastFireTime = currentTime;
+		}
+		else
+		{
+			if (targetDirection.x == float.PositiveInfinity)
+			{
+				targetDirection = Head.SelectTargetDirection(this.TotalRange());
+			}
+
+			if (targetDirection.x != float.PositiveInfinity)
+			{
+				this.RefreshGunDirection(targetDirection);
+			}
+		}
+	}
+
+	private float TotalPowerMultiplicator()
+	{
+		float totalMultiplicator = Head.PowerMultiplicator;
+
+		if (Base is TowerBaseHumanController baseHuman)
+		{
+			totalMultiplicator *= baseHuman.PowerMultiplicator;
+		}
+
+		return totalMultiplicator;
+	}
+
+	private float TotalCadence()
+	{
+		float totalCadence = Head.Cadence;
+
+		if (Base is TowerBaseAlienController baseAlien)
+		{
+			totalCadence /= baseAlien.CadenceMultiplicator;
+		}
+
+		return totalCadence;
+	}
+
+	private float TotalRange()
+	{
+		float totalRange = Core.Range;
+
+		if (Base is TowerBaseRobotController baseRobot)
+		{
+			totalRange *= baseRobot.RangeMultiplicator;
+		}
+
+		return totalRange;
+	}
+
+	private void RefreshGunDirection(Vector3 targetDirection)
+	{
+		Vector3 coreRotation = Core.transform.rotation.eulerAngles;
+		Vector3 headRotation = Head.transform.rotation.eulerAngles;
+
+		float targetAngle = Mathf.Atan2(targetDirection.z, targetDirection.x);
+		float angleDelta = geometryHelper.AngleDelta(targetAngle, currentAngle);
+
+		float angleIncrement = -Math.Sign(angleDelta) * Mathf.Min(Mathf.Abs(angleDelta), RotationSpeed);
+		float nextAngle = currentAngle + angleIncrement;
+		currentAngle = nextAngle;
+
+		float nextDirX = Mathf.Cos(nextAngle);
+		float nextDirY = Mathf.Sin(nextAngle);
+		Vector3 nextDirection = new Vector3(nextDirX, 0, nextDirY);
+
+		Core.transform.rotation = Quaternion.FromToRotation(transform.right, nextDirection);
+		Head.transform.rotation = Core.transform.rotation;
 	}
 
 	public void UpgradeTowerBase(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject basePrefab)
@@ -47,6 +146,7 @@ public class TowerController : BuildingController
 		this.TransfertButtonFormat(BuildingUi.SectionBase, upgradeButtonSprite, upgradeButtonBackground);
 		GameObject newBaseObject = Instantiate<GameObject>(basePrefab);
 		this.SetBase(newBaseObject);
+		this.RefreshSellPrice();
 	}
 
 	public void UpgradeTowerCore(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject corePrefab)
@@ -54,6 +154,7 @@ public class TowerController : BuildingController
 		this.TransfertButtonFormat(BuildingUi.SectionCore, upgradeButtonSprite, upgradeButtonBackground);
 		GameObject newCoreObject = Instantiate<GameObject>(corePrefab);
 		this.SetCore(newCoreObject);
+		this.RefreshSellPrice();
 	}
 
 	public void UpgradeTowerHead(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject headPrefab)
@@ -61,6 +162,20 @@ public class TowerController : BuildingController
 		this.TransfertButtonFormat(BuildingUi.SectionHead, upgradeButtonSprite, upgradeButtonBackground);
 		GameObject newHeadObject = Instantiate<GameObject>(headPrefab);
 		this.SetHead(newHeadObject);
+		this.RefreshSellPrice();
+	}
+
+	private void RefreshSellPrice()
+	{
+		SellAmout.text = this.TotalPrice() + " $";
+	}
+
+	private float TotalPrice()
+	{
+		float basePrice = Base != null ? Base.Price : 0;
+		float corePrice = Core != null ? Core.Price : 0;
+		float headPrice = Head != null ? Head.Price : 0;
+		return basePrice + corePrice + headPrice;
 	}
 
 	private void TransfertButtonFormat(StageSection targetStageSection, Sprite upgradeButtonSprite, Color upgradeButtonBackground)

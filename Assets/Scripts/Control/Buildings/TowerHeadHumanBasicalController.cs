@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TowerHeadHumanBasicalController : TowerHeadController
 {
-	public Vector3 SelectTargetDirection(float range)
+	public override Vector3 SelectTargetDirection(float range)
 	{
 		Vector3 hostTowerPosition = this.HostTowerPosition();
 

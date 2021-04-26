@@ -14,11 +14,15 @@ public class EnemyController : MonoBehaviour
 
 	private StepPoint stepPointToReach;
 
+	private GeometryHelper geometryHelper;
+
 	private void Awake()
 	{
 		lastPosition = Vector3.zero;
 		stepPoints = new StepPoint[0];
 		stepPointToReach = null;
+
+		geometryHelper = new GeometryHelper();
 	}
 
 	public void StartTraveling(StepPoint[] newStepPoints)
@@ -47,7 +51,7 @@ public class EnemyController : MonoBehaviour
 			float currentAngle = Mathf.Atan2(currentDirection.z, currentDirection.x);
 			float targetAngle = Mathf.Atan2(targetDirection.z, targetDirection.x);
 
-			float angleDelta = this.angleDelta(currentAngle, targetAngle);
+			float angleDelta = geometryHelper.AngleDelta(currentAngle, targetAngle);
 			float angleIncrement = Mathf.Sign(angleDelta) * Mathf.Min(Mathf.Abs(angleDelta), AngularVelocity);
 			float newAngle = currentAngle + angleIncrement;
 
@@ -107,22 +111,5 @@ public class EnemyController : MonoBehaviour
 		}
 
 		return allCompleted;
-	}
-
-	private float angleDelta(float angle1, float angle2)
-	{
-		float angleDeltaRaw = angle2 - angle1;
-
-		while (angleDeltaRaw < -Mathf.PI)
-		{
-			angleDeltaRaw += Mathf.PI * 2;
-		}
-
-		while (angleDeltaRaw > Mathf.PI)
-		{
-			angleDeltaRaw -= Mathf.PI * 2;
-		}
-
-		return angleDeltaRaw;
 	}
 }

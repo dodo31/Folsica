@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TowerHeadRobotAdvancedController : TowerHeadController
 {
-	public Vector3 SelectTargetDirection(float range)
+	public override Vector3 SelectTargetDirection(float range)
 	{
 		float randomAngle = UnityEngine.Random.Range(0, Mathf.PI * 2);
 		float directionX = Mathf.Cos(randomAngle);
