@@ -253,9 +253,9 @@ public class BuildingsController : MonoBehaviour
 				int colCountPlaced = placedBuilding.ColCount;
 				BuildingFootprintRow[] buildingFootprintRowsPlaced = placedBuilding.FootprintRows;
 
-				for (int rowPlaced = 0; rowPlaced < rowCountPlaced; rowPlaced++)
+				for (int rowPlaced = 0; rowPlaced < rowCountPlaced && !isColliding; rowPlaced++)
 				{
-					for (int colPlaced = 0; colPlaced < colCountPlaced; colPlaced++)
+					for (int colPlaced = 0; colPlaced < colCountPlaced && !isColliding; colPlaced++)
 					{
 						bool isFilledPlaced = buildingFootprintRowsPlaced[rowPlaced].cells[colPlaced];
 
@@ -263,9 +263,9 @@ public class BuildingsController : MonoBehaviour
 						{
 							Vector3 cellPositionPlaced = positionPlaced + new Vector3(colPlaced, 0, -rowPlaced);
 
-							for (int rowOther = 0; rowOther < rowCountOther; rowOther++)
+							for (int rowOther = 0; rowOther < rowCountOther && !isColliding; rowOther++)
 							{
-								for (int colOther = 0; colOther < colCountOther; colOther++)
+								for (int colOther = 0; colOther < colCountOther && !isColliding; colOther++)
 								{
 									bool isFilledOther = buildingFootprintRowsOther[rowOther].cells[colOther];
 
@@ -288,4 +288,7 @@ public class BuildingsController : MonoBehaviour
 
 		return isColliding;
 	}
+
+	public BuildingController SelectedBuilding { get => selectedBuilding; set => selectedBuilding = value; }
+	public BuildingController HeldBuilding { get => heldBuilding; set => heldBuilding = value; }
 }

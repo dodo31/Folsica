@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class InputController : MonoBehaviour
 {
@@ -144,6 +146,34 @@ public class InputController : MonoBehaviour
 		}
 	}
 
-	public GameObject ActiveObject { get => activeObject; set => activeObject = value; }
+	public bool IsCanvasPointed(Canvas canvas)
+	{
+		bool isPointed = false;
 
+		GraphicRaycaster raycaster = canvas.GetComponent<GraphicRaycaster>();
+
+		EventSystem eventSystem = EventSystem.current;
+		PointerEventData pointerEventData = new PointerEventData(eventSystem);
+		pointerEventData.position = Input.mousePosition;
+
+		List<RaycastResult> raycastResults = new List<RaycastResult>();
+		raycaster.Raycast(pointerEventData, raycastResults);
+
+		for (int i = 0; i < raycastResults.Count && !isPointed; i++)
+		{
+			RaycastResult raycastResult = raycastResults[i];
+			GameObject pointedObject = raycastResult.gameObject;
+
+			Canvas pointedCanvas = pointedObject.GetComponentInParent<Canvas>();
+
+			if (pointedCanvas == canvas)
+			{
+				isPointed = true;
+			}
+		}
+
+		return isPointed;
+	}
+
+	public GameObject ActiveObject { get => activeObject; set => activeObject = value; }
 }

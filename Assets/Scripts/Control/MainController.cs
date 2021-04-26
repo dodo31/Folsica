@@ -1,6 +1,8 @@
+using System.Globalization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MainController : MonoBehaviour
 {
@@ -39,6 +41,8 @@ public class MainController : MonoBehaviour
 
 	private void DispatchObjectClicked(GameObject clickedObject)
 	{
+		EventSystem eventSystem = EventSystem.current;
+
 		switch (clickedObject.tag)
 		{
 		case "Building":
@@ -53,11 +57,24 @@ public class MainController : MonoBehaviour
 			buildingsController.SelectBuildingMenu(buildingController);
 			break;
 		case "Ground":
-			buildingsController.UnselectAllBuildingMenues();
+			this.ManageBackgroundClicking();
 			break;
 		case "Grid":
-			buildingsController.UnselectAllBuildingMenues();
+			this.ManageBackgroundClicking();
 			break;
+		}
+	}
+
+	private void ManageBackgroundClicking()
+	{
+		if (buildingsController.SelectedBuilding != null)
+		{
+			Canvas buildingCanvas = buildingsController.SelectedBuilding.ContextualUi;
+
+			if (!InputController.IsCanvasPointed(buildingCanvas))
+			{
+				buildingsController.UnselectAllBuildingMenues();
+			}
 		}
 	}
 
