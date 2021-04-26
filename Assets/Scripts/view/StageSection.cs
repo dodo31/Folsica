@@ -9,7 +9,10 @@ public class StageSection : MonoBehaviour
 	public Text RangeIndicator;
 	public Text SpeedIndicator;
 
-    public Button SelectUpgradeButton;
+	public Button SelectUpgradeButton;
+
+	public Image StagePreview;
+	public Image ButtonBackground;
 
 	protected void Start()
 	{

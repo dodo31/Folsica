@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,35 +21,50 @@ public class TowerController : BuildingController
 
 		Canvas canvas = this.GetComponentInChildren<Canvas>(true);
 		canvas.worldCamera = uiCamera;
+
+		this.BindUpgradesToButtons(BuildingUi.UpgradePanelBase, this.UpgradeTowerBase);
+		this.BindUpgradesToButtons(BuildingUi.UpgradePanelCore, this.UpgradeTowerCore);
+		this.BindUpgradesToButtons(BuildingUi.UpgradePanelHead, this.UpgradeTowerHead);
 	}
 
-	public void UpgradeTowerBase(string towerPath)
+	private void BindUpgradesToButtons(GameObject stagePanel, Action<Sprite, Color, GameObject> actionToBind)
 	{
-		GameObject basePrefab = this.LoadTowerStage(towerPath + "Base");
-		this.SetBase(basePrefab);
+		UpgradeButton[] upgradeButtons = stagePanel.GetComponentsInChildren<UpgradeButton>();
+
+		foreach (UpgradeButton upgradeButton in upgradeButtons)
+		{
+			upgradeButton.OnStageUpgradeRequired += actionToBind;
+		}
 	}
 
-	public void UpgradeTowerCore(string towerPath)
+	public void UpgradeTowerBase(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject basePrefab)
 	{
-		GameObject corePrefab = this.LoadTowerStage(towerPath + "Core");
-		this.SetCore(corePrefab);
+		this.TransfertButtonFormat(BuildingUi.SectionBase, upgradeButtonSprite, upgradeButtonBackground);
+		GameObject newBaseObject = Instantiate<GameObject>(basePrefab);
+		this.SetBase(newBaseObject);
 	}
 
-	public void UpgradeTowerHead(string towerPath)
+	public void UpgradeTowerCore(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject corePrefab)
 	{
-		GameObject headPrefab = this.LoadTowerStage(towerPath + "Head");
-		this.SetHead(headPrefab);
+		this.TransfertButtonFormat(BuildingUi.SectionCore, upgradeButtonSprite, upgradeButtonBackground);
+		GameObject newCoreObject = Instantiate<GameObject>(corePrefab);
+		this.SetCore(newCoreObject);
 	}
 
-	private GameObject LoadTowerStage(string stageLocalPath)
+	public void UpgradeTowerHead(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject headPrefab)
 	{
-		GameObject baseStagePrefab = Resources.Load<GameObject>(TOWERS_PATH + stageLocalPath);
-		GameObject baseStage = Instantiate<GameObject>(baseStagePrefab);
+		this.TransfertButtonFormat(BuildingUi.SectionHead, upgradeButtonSprite, upgradeButtonBackground);
+		GameObject newHeadObject = Instantiate<GameObject>(headPrefab);
+		this.SetHead(newHeadObject);
+	}
 
-		baseStage.transform.position = Vector3.zero;
-		baseStage.transform.localScale = Vector3.one;
-
-		return baseStage;
+	private void TransfertButtonFormat(StageSection targetStageSection,  Sprite upgradeButtonSprite, Color upgradeButtonBackground)
+	{
+		if (upgradeButtonSprite != null && !upgradeButtonBackground.Equals(Color.black))
+		{
+			targetStageSection.StagePreview.sprite = upgradeButtonSprite;
+			targetStageSection.ButtonBackground.color = upgradeButtonBackground;
+		}
 	}
 
 	public void SetBase(GameObject basePrefab)

@@ -3,12 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildingsController : MonoBehaviour
 {
 	public GridController Grid;
 
 	public Transform PlayArea;
+
+	public NeutralStages NeutralStages;
 
 	private BuildingController selectedBuilding;
 
@@ -32,6 +35,7 @@ public class BuildingsController : MonoBehaviour
 
 		buildingGridPositions = new Dictionary<BuildingController, Vector3>();
 	}
+
 	public void AddBuilding(GameObject buildingPrefab)
 	{
 		Grid.gameObject.SetActive(true);
@@ -47,23 +51,34 @@ public class BuildingsController : MonoBehaviour
 
 		if (newBuilding is TowerController newTower)
 		{
+			// newBuilding.OnBaseUpgradeRequired += this.UpgradeTowerBase;
+
 			newTower.SellButton.onClick.AddListener(() =>
 			{
 				this.SellTower(newTower);
 			});
+
+			newTower.UpgradeTowerBase(null, Color.black, NeutralStages.Base);
+			newTower.UpgradeTowerCore(null, Color.black, NeutralStages.Core);
+			newTower.UpgradeTowerHead(null, Color.black, NeutralStages.Head);
 		}
 
 		selectedBuilding = newBuilding;
 
-		if (newBuilding is TowerController tower)
-		{
-			tower.UpgradeTowerBase("Neutral/");
-			tower.UpgradeTowerCore("Neutral/");
-			tower.UpgradeTowerHead("Neutral/");
-		}
 
 		this.StartMove(newBuildingObject);
 	}
+
+	// private GameObject LoadTowerStage(string stageLocalPath)
+	// {
+	// 	GameObject baseStagePrefab = Resources.Load<GameObject>(TOWERS_PATH + stageLocalPath);
+	// 	GameObject baseStage = Instantiate<GameObject>(baseStagePrefab);
+
+	// 	baseStage.transform.position = Vector3.zero;
+	// 	baseStage.transform.localScale = Vector3.one;
+
+	// 	return baseStage;
+	// }
 
 	private void SellTower(TowerController towerToRemove)
 	{

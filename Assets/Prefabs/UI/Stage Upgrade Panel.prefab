@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7668262607066063635}
   - component: {fileID: 7668262607066063634}
   m_Layer: 5
-  m_Name: Tower Upgrade Panel
+  m_Name: Stage Upgrade Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
     m_Top: 8
     m_Bottom: 8
   m_ChildAlignment: 4
-  m_Spacing: 4
+  m_Spacing: 16
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public abstract class TowerStageController : MonoBehaviour
 {
+	public int Price = 0;
+
 	private MeshFilter meshFilter;
 	private float height;
 
@@ -15,7 +17,7 @@ public abstract class TowerStageController : MonoBehaviour
 	private float ComputeHeight()
 	{
 		Bounds meshBounds = meshFilter.sharedMesh.bounds;
-		return meshBounds.max.z - meshBounds.min.z;
+		return meshBounds.max.y - meshBounds.min.y;
 	}
 
 	public float Height { get => height; set => height = value; }

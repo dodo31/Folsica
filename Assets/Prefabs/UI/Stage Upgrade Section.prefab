@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 6899517135004847546}
   - component: {fileID: 6217124288581854435}
   m_Layer: 5
-  m_Name: Tower Upgrade Section
+  m_Name: Stage Upgrade Section
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -566,6 +566,8 @@ MonoBehaviour:
   RangeIndicator: {fileID: 7458554242459079895}
   SpeedIndicator: {fileID: 7458554241751001766}
   SelectUpgradeButton: {fileID: 4642656745144727969}
+  StagePreview: {fileID: 7049256701532955552}
+  ButtonBackground: {fileID: 5748516391170036793}
 --- !u!1 &5006345077343853144
 GameObject:
   m_ObjectHideFlags: 0
