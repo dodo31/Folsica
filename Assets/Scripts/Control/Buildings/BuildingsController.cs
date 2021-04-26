@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class BuildingsController : MonoBehaviour
 {
+	private const string TOWERS_PATH = "Models/Buildings/Towers/";
+
 	public GridController Grid;
 
 	public Transform PlayArea;
@@ -48,9 +50,9 @@ public class BuildingsController : MonoBehaviour
 
 		selectedBuilding = newBuildingController;
 
-		this.UpgradeTowerBase("Placeholder/");
-		this.UpgradeTowerCore("Placeholder/");
-		this.UpgradeTowerHead("Placeholder/");
+		this.UpgradeTowerBase("Neutral/");
+		this.UpgradeTowerCore("Neutral/");
+		this.UpgradeTowerHead("Neutral/");
 
 		this.StartMove(newBuilding);
 	}
@@ -89,7 +91,7 @@ public class BuildingsController : MonoBehaviour
 
 	private GameObject LoadTowerStage(string stageLocalPath)
 	{
-		GameObject baseStagePrefab = Resources.Load<GameObject>("Models/Buildings/Towers/" + stageLocalPath);
+		GameObject baseStagePrefab = Resources.Load<GameObject>(TOWERS_PATH + stageLocalPath);
 		GameObject baseStage = Instantiate<GameObject>(baseStagePrefab);
 
 		baseStage.transform.position = Vector3.zero;

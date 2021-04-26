@@ -16,14 +16,14 @@ public class EnemiesController : MonoBehaviour
 		enemies = new List<EnemyController>();
 	}
 
-	private void LateUpdate()
+	private void FixedUpdate()
 	{
 		this.SpawnRandomEnemy();
 	}
 
 	public void SpawnRandomEnemy()
 	{
-		float randomNumber = UnityEngine.Random.Range(0, 4);
+		float randomNumber = UnityEngine.Random.Range(0, 5);
 
 		if (randomNumber < 1)
 		{
@@ -40,6 +40,10 @@ public class EnemiesController : MonoBehaviour
 		else if (randomNumber >= 3 && randomNumber < 4)
 		{
 			this.SpawRobotCar();
+		}
+        else if (randomNumber >= 4 && randomNumber < 5)
+		{
+			this.SpawRobotBoss();
 		}
 	}
 
@@ -67,9 +71,15 @@ public class EnemiesController : MonoBehaviour
 		this.SpwanEnemy(robotCarObject);
 	}
 
+	public void SpawRobotBoss()
+	{
+		GameObject robotBossObject = Resources.Load<GameObject>(ENEMIES_PATH + "Robot Boss");
+		this.SpwanEnemy(robotBossObject);
+	}
+
 	public void SpwanEnemy(GameObject enemyPrefab)
 	{
-        GameObject enemyObject = Instantiate<GameObject>(enemyPrefab);
+		GameObject enemyObject = Instantiate<GameObject>(enemyPrefab);
 		enemyObject.transform.localScale = Vector3.one;
 		enemyObject.transform.SetParent(PlayArea.transform);
 

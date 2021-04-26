@@ -10,7 +10,11 @@ public class TowerController : BuildingController
 
 	protected void Awake()
 	{
-
+		GameObject uiCameraObject = GameObject.FindGameObjectWithTag("UI Camera");
+		Camera uiCamera = uiCameraObject.GetComponent<Camera>();
+		
+		Canvas canvas = this.GetComponentInChildren<Canvas>();
+		canvas.worldCamera = uiCamera;
 	}
 
 	public void SetBase(GameObject basePrefab)
@@ -49,11 +53,11 @@ public class TowerController : BuildingController
 		{
 			Base.transform.localPosition = Vector3.zero;
 
-			float corePosZ = this.ComputeStagePosition(new TowerStageController[] { Base });
-			Core.transform.localPosition = new Vector3(0, 0, corePosZ);
+			float corePosY = this.ComputeStagePosition(new TowerStageController[] { Base });
+			Core.transform.localPosition = new Vector3(0, corePosY, 0);
 
-			float headPosZ = this.ComputeStagePosition(new TowerStageController[] { Base, Core });
-			Head.transform.localPosition = new Vector3(0, 0, headPosZ);
+			float headPosY = this.ComputeStagePosition(new TowerStageController[] { Base, Core });
+			Head.transform.localPosition = new Vector3(0, headPosY, 0);
 		}
 	}
 
