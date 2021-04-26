@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class BuildingsController : MonoBehaviour
 {
-	private const string TOWERS_PATH = "Models/Buildings/Towers/";
-
 	public GridController Grid;
 
 	public Transform PlayArea;
@@ -34,7 +32,6 @@ public class BuildingsController : MonoBehaviour
 
 		buildingGridPositions = new Dictionary<BuildingController, Vector3>();
 	}
-
 	public void AddBuilding(GameObject buildingPrefab)
 	{
 		Grid.gameObject.SetActive(true);
@@ -58,9 +55,12 @@ public class BuildingsController : MonoBehaviour
 
 		selectedBuilding = newBuilding;
 
-		this.UpgradeTowerBase("Neutral/");
-		this.UpgradeTowerCore("Neutral/");
-		this.UpgradeTowerHead("Neutral/");
+		if (newBuilding is TowerController tower)
+		{
+			tower.UpgradeTowerBase("Neutral/");
+			tower.UpgradeTowerCore("Neutral/");
+			tower.UpgradeTowerHead("Neutral/");
+		}
 
 		this.StartMove(newBuildingObject);
 	}
@@ -75,44 +75,6 @@ public class BuildingsController : MonoBehaviour
 	{
 		buildingGridPositions.Remove(building);
 		this.DestroyBuilding(building);
-	}
-
-	public void UpgradeTowerBase(string towerPath)
-	{
-		if (selectedBuilding is TowerController selectedTower)
-		{
-			GameObject basePrefab = this.LoadTowerStage(towerPath + "Base");
-			selectedTower.SetBase(basePrefab);
-		}
-	}
-
-	public void UpgradeTowerCore(string towerPath)
-	{
-		if (selectedBuilding is TowerController selectedTower)
-		{
-			GameObject corePrefab = this.LoadTowerStage(towerPath + "Core");
-			selectedTower.SetCore(corePrefab);
-		}
-	}
-
-	public void UpgradeTowerHead(string towerPath)
-	{
-		if (selectedBuilding is TowerController selectedTower)
-		{
-			GameObject headPrefab = this.LoadTowerStage(towerPath + "Head");
-			selectedTower.SetHead(headPrefab);
-		}
-	}
-
-	private GameObject LoadTowerStage(string stageLocalPath)
-	{
-		GameObject baseStagePrefab = Resources.Load<GameObject>(TOWERS_PATH + stageLocalPath);
-		GameObject baseStage = Instantiate<GameObject>(baseStagePrefab);
-
-		baseStage.transform.position = Vector3.zero;
-		baseStage.transform.localScale = Vector3.one;
-
-		return baseStage;
 	}
 
 	public void StartMove(GameObject objectToMove)

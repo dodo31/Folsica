@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class TowerController : BuildingController
 {
+	private const string TOWERS_PATH = "Models/Buildings/Towers/";
+
 	public TowerBaseController Base;
 	public TowerCoreController Core;
 	public TowerHeadController Head;
@@ -15,9 +17,38 @@ public class TowerController : BuildingController
 	{
 		GameObject uiCameraObject = GameObject.FindGameObjectWithTag("UI Camera");
 		Camera uiCamera = uiCameraObject.GetComponent<Camera>();
-		
+
 		Canvas canvas = this.GetComponentInChildren<Canvas>(true);
 		canvas.worldCamera = uiCamera;
+	}
+
+	public void UpgradeTowerBase(string towerPath)
+	{
+		GameObject basePrefab = this.LoadTowerStage(towerPath + "Base");
+		this.SetBase(basePrefab);
+	}
+
+	public void UpgradeTowerCore(string towerPath)
+	{
+		GameObject corePrefab = this.LoadTowerStage(towerPath + "Core");
+		this.SetCore(corePrefab);
+	}
+
+	public void UpgradeTowerHead(string towerPath)
+	{
+		GameObject headPrefab = this.LoadTowerStage(towerPath + "Head");
+		this.SetHead(headPrefab);
+	}
+
+	private GameObject LoadTowerStage(string stageLocalPath)
+	{
+		GameObject baseStagePrefab = Resources.Load<GameObject>(TOWERS_PATH + stageLocalPath);
+		GameObject baseStage = Instantiate<GameObject>(baseStagePrefab);
+
+		baseStage.transform.position = Vector3.zero;
+		baseStage.transform.localScale = Vector3.one;
+
+		return baseStage;
 	}
 
 	public void SetBase(GameObject basePrefab)

@@ -69,7 +69,7 @@ public class MainController : MonoBehaviour
 	{
 		if (buildingsController.SelectedBuilding != null)
 		{
-			Canvas buildingCanvas = buildingsController.SelectedBuilding.ContextualUi;
+			Canvas buildingCanvas = buildingsController.SelectedBuilding.BuildingUi.ContextualUi;
 
 			if (!InputController.IsCanvasPointed(buildingCanvas))
 			{

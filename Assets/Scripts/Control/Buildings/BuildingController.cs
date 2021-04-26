@@ -14,10 +14,10 @@ public abstract class BuildingController : HighlightableController
 	[SerializeField]
 	public BuildingFootprintRow[] FootprintRows;
 
-	public Canvas ContextualUi;
+	public BuildingUi BuildingUi;
 
 	public void ToggleMenu(bool showMenu)
 	{
-		ContextualUi.gameObject.SetActive(showMenu);
+		BuildingUi.ToggleMenu(showMenu);
 	}
 }
