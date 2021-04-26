@@ -558,6 +558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ColorTemplate:
     NeutralColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 0.49803922}
+    SelectedColor: {r: 0, g: 0.39607844, b: 1, a: 0.49803922}
     ValidColor: {r: 0, g: 1, b: 0, a: 0.49803922}
     InvalidColor: {r: 1, g: 0, b: 0, a: 0.49803922}
   HighlightMaterialPrefab: {fileID: 2100000, guid: c5f34a7629217e84ea3efcab1f61a2fc, type: 2}

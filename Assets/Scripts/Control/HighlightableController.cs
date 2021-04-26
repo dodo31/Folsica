@@ -15,6 +15,12 @@ public abstract class HighlightableController : MonoBehaviour
 		this.SetHightlightColor(newHighlightMaterial, ColorTemplate.NeutralColor);
 	}
 
+	public void HighlightAsSelected()
+	{
+		Material[] newHighlightMaterial = this.ShowHighlight();
+		this.SetHightlightColor(newHighlightMaterial, ColorTemplate.SelectedColor);
+	}
+
 	public void HighlightAsValid()
 	{
 		Material[] newHighlightMaterials = this.ShowHighlight();

@@ -213,18 +213,20 @@ public class BuildingsController : MonoBehaviour
 		return isMovingObject;
 	}
 
-	public void SelectBuildingMenu(BuildingController buildingController)
+	public void SelectBuildingMenu(BuildingController building)
 	{
 		this.UnselectAllBuildingMenues();
-		buildingController.ToggleMenu(true);
-		selectedBuilding = buildingController;
+		building.HighlightAsSelected();
+		building.ToggleMenu(true);
+		selectedBuilding = building;
 	}
 
 	public void UnselectAllBuildingMenues()
 	{
-		foreach (BuildingController buildingController in buildingGridPositions.Keys)
+		foreach (BuildingController building in buildingGridPositions.Keys)
 		{
-			buildingController.ToggleMenu(false);
+			building.HideHighlight();
+			building.ToggleMenu(false);
 		}
 
 		selectedBuilding = null;
