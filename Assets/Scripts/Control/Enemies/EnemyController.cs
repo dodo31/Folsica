@@ -2,6 +2,11 @@ using System;
 using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
+	private enum State
+	{
+		LIVING, DYING
+	}
+
 	public float Health = 0;
 
 	public float Velocity = 0.0035f;
@@ -16,6 +21,8 @@ public class EnemyController : MonoBehaviour
 
 	private GeometryHelper geometryHelper;
 
+	private State currentState;
+
 	private void Awake()
 	{
 		lastPosition = Vector3.zero;
@@ -23,6 +30,8 @@ public class EnemyController : MonoBehaviour
 		stepPointToReach = null;
 
 		geometryHelper = new GeometryHelper();
+
+		currentState = State.LIVING;
 	}
 
 	public void StartTraveling(StepPoint[] newStepPoints)
@@ -38,6 +47,19 @@ public class EnemyController : MonoBehaviour
 	}
 
 	protected void FixedUpdate()
+	{
+		switch (currentState)
+		{
+		case State.LIVING:
+			this.Live();
+			break;
+		case State.DYING:
+			this.Die();
+			break;
+		}
+	}
+
+	private void Live()
 	{
 		if (!this.AllStepsCompleted())
 		{
@@ -76,6 +98,18 @@ public class EnemyController : MonoBehaviour
 		}
 	}
 
+	private void Die()
+	{
+		if (transform.localScale.x > 0)
+		{
+			transform.localScale = Vector3.one * (transform.localScale.x - 1 / 60f);
+		}
+		else
+		{
+			Destroy(gameObject);
+		}
+	}
+
 	private float DistanceFromStep()
 	{
 		return Vector3.Distance(stepPointToReach.Position, transform.position);
@@ -111,5 +145,15 @@ public class EnemyController : MonoBehaviour
 		}
 
 		return allCompleted;
+	}
+
+	public void HandleDamage(float damage)
+	{
+		Health -= damage;
+
+		if (Health <= 0)
+		{
+			currentState = State.DYING;
+		}
 	}
 }

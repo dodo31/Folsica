@@ -79,11 +79,12 @@ public class EnemiesController : MonoBehaviour
 
 	public void SpwanEnemy(GameObject enemyPrefab)
 	{
-		GameObject enemyObject = Instantiate<GameObject>(enemyPrefab);
-		enemyObject.transform.localScale = Vector3.one;
-		enemyObject.transform.SetParent(PlayArea.transform);
+		GameObject newEnemyObject = Instantiate<GameObject>(enemyPrefab);
+		newEnemyObject.tag = "Enemy";
+		newEnemyObject.transform.localScale = Vector3.one;
+		newEnemyObject.transform.SetParent(PlayArea.transform);
 
-		EnemyController newEnemy = enemyObject.GetComponent<EnemyController>();
+		EnemyController newEnemy = newEnemyObject.GetComponent<EnemyController>();
 		enemies.Add(newEnemy);
 
 		PathController path = this.SelectRandomPath();

@@ -58,11 +58,18 @@ public class TowerController : BuildingController
 	{
 		float currentTime = Time.time;
 
-		if (currentTime - lastFireTime > this.TotalCadence())
-		{
-			// Fire
+		float cadence = this.TotalCadence();
 
-			targetDirection = Head.SelectTargetDirection(this.TotalRange());
+		if (cadence > 0 && currentTime - lastFireTime > cadence)
+		{
+			float totalRange = this.TotalRange();
+
+			if (Core.ProjectilePrefab != null)
+			{
+				this.Fire(totalRange);
+			}
+
+			targetDirection = Head.SelectTargetDirection(totalRange);
 
 			if (targetDirection.x != float.PositiveInfinity)
 			{
@@ -119,6 +126,21 @@ public class TowerController : BuildingController
 		}
 
 		return totalRange;
+	}
+
+	private void Fire(float totalRange)
+	{
+		float powerMultiplicator = this.TotalPowerMultiplicator();
+
+		float directionX = Mathf.Cos(currentAngle);
+		float directionY = Mathf.Sin(currentAngle);
+		Vector3 currentdDrection = new Vector3(directionX, 0, directionY);
+
+		GameObject newProjectileObject = GameObject.Instantiate<GameObject>(Core.ProjectilePrefab);
+		newProjectileObject.transform.SetParent(transform.parent);
+
+		ProjectileController newProjectile = newProjectileObject.GetComponent<ProjectileController>();
+		newProjectile.Emit(currentdDrection, Core.transform.position, totalRange, powerMultiplicator);
 	}
 
 	private void RefreshGunDirection(Vector3 targetDirection)

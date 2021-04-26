@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Price: 100
   Range: 40
-  ProjectilePrefab: {fileID: 0}
+  ProjectilePrefab: {fileID: 3390024439405100320, guid: 06dd193d18c8c8b45af5027488ba8de4, type: 3}
 --- !u!1001 &4226679545463820878
 PrefabInstance:
   m_ObjectHideFlags: 0
