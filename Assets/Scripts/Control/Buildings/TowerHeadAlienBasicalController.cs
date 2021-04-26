@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TowerHeadAlienBasicalController : TowerHeadController
 {
-	public Vector3 TargetDirection(float range)
+	public Vector3 SelectTargetDirection(float range)
 	{
 		return Vector3.positiveInfinity;
 	}
