@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Dummiesman;
 
 public class MainController : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class MainController : MonoBehaviour
 	public TimeController TimeController;
 
 	public BuildingsController buildingsController;
+
+	public int tileIndex = 1;
 
 	protected void Start()
 	{
