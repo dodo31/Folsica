@@ -39,26 +39,41 @@ public class BuildingsController : MonoBehaviour
 	{
 		Grid.gameObject.SetActive(true);
 
-		GameObject newBuilding = Instantiate<GameObject>(buildingPrefab);
+		GameObject newBuildingObject = Instantiate<GameObject>(buildingPrefab);
 		Vector3 spawnScreenPosition = Input.mousePosition - new Vector3(0, 20, 0);
-		newBuilding.transform.position = this.PointedPosition(spawnScreenPosition);
-		newBuilding.transform.SetParent(PlayArea);
+		newBuildingObject.transform.position = this.PointedPosition(spawnScreenPosition);
+		newBuildingObject.transform.SetParent(PlayArea);
 
-		BuildingController newBuildingController = newBuilding.GetComponentInParent<BuildingController>();
-		newBuildingController.HighlightAsNeutral();
+		BuildingController newBuilding = newBuildingObject.GetComponentInParent<BuildingController>();
+		newBuilding.HighlightAsNeutral();
 		this.UnselectAllBuildingMenues();
 
-		selectedBuilding = newBuildingController;
+		if (newBuilding is TowerController newTower)
+		{
+			newTower.SellButton.onClick.AddListener(() =>
+			{
+				this.SellTower(newTower);
+			});
+		}
+
+		selectedBuilding = newBuilding;
 
 		this.UpgradeTowerBase("Neutral/");
 		this.UpgradeTowerCore("Neutral/");
 		this.UpgradeTowerHead("Neutral/");
 
-		this.StartMove(newBuilding);
+		this.StartMove(newBuildingObject);
+	}
+
+	private void SellTower(TowerController towerToRemove)
+	{
+		// Retribute
+		this.RemoveBuilding(towerToRemove);
 	}
 
 	public void RemoveBuilding(BuildingController building)
 	{
+		buildingGridPositions.Remove(building);
 		this.DestroyBuilding(building);
 	}
 

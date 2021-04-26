@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TowerController : BuildingController
 {
@@ -8,12 +9,14 @@ public class TowerController : BuildingController
 	public TowerCoreController Core;
 	public TowerHeadController Head;
 
+	public Button SellButton;
+
 	protected void Awake()
 	{
 		GameObject uiCameraObject = GameObject.FindGameObjectWithTag("UI Camera");
 		Camera uiCamera = uiCameraObject.GetComponent<Camera>();
 		
-		Canvas canvas = this.GetComponentInChildren<Canvas>();
+		Canvas canvas = this.GetComponentInChildren<Canvas>(true);
 		canvas.worldCamera = uiCamera;
 	}
 
