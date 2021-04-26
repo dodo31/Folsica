@@ -22,8 +22,11 @@ public class EnemyController : MonoBehaviour
 	public void StartTraveling(StepPoint[] newStepPoints)
 	{
 		stepPoints = newStepPoints;
-		stepPointToReach = stepPoints[0];
+		StepPoint firstStepPoint = stepPoints[0];
+		firstStepPoint.IsReached = true;
+		transform.position = firstStepPoint.Position;
 
+		stepPointToReach = stepPoints[1];
 		Vector3 deltaToStep = stepPointToReach.Position - transform.position;
 		lastPosition = transform.position - deltaToStep.normalized * Velocity;
 	}

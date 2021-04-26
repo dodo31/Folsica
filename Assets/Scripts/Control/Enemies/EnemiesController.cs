@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemiesController : MonoBehaviour
 {
-	public Transform Environement;
+	public Transform PlayArea;
 
 	public PathController[] Paths;
 
@@ -17,14 +17,14 @@ public class EnemiesController : MonoBehaviour
 
 	private void LateUpdate()
 	{
-        // this.SpwanEnemy();
+        this.SpwanEnemy();
 	}
 
 	public void SpwanEnemy()
 	{
 		GameObject newEnemyObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		newEnemyObject.transform.localScale = new Vector3(0.1f, 0.05f, 0.05f);
-		newEnemyObject.transform.SetParent(Environement.transform);
+		newEnemyObject.transform.SetParent(PlayArea.transform);
 
 		EnemyController newEnemy = newEnemyObject.AddComponent<EnemyController>();
 		enemies.Add(newEnemy);

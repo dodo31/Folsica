@@ -914,8 +914,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 877432744}
+  - component: {fileID: 877432746}
+  - component: {fileID: 877432745}
   m_Layer: 0
-  m_Name: Environement
+  m_Name: Play Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -939,6 +941,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &877432745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877432743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d4e2025be897c4c871d3651f8cb02f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayArea: {fileID: 877432744}
+  Paths:
+  - {fileID: 1926044293}
+--- !u!114 &877432746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877432743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49bb0166c311f684aa51f7209eaf4379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grid: {fileID: 1184818952}
+  PlayArea: {fileID: 877432744}
 --- !u!1 &879108930
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,7 +1146,6 @@ GameObject:
   - component: {fileID: 973775706}
   - component: {fileID: 973775705}
   - component: {fileID: 973775704}
-  - component: {fileID: 973775708}
   m_Layer: 5
   m_Name: Main UI
   m_TagString: Untagged
@@ -1206,20 +1236,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &973775708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973775703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49bb0166c311f684aa51f7209eaf4379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Grid: {fileID: 1184818952}
-  Environement: {fileID: 877432744}
 --- !u!1 &1001627306
 GameObject:
   m_ObjectHideFlags: 0
@@ -1720,7 +1736,6 @@ GameObject:
   - component: {fileID: 1505929004}
   - component: {fileID: 1505929006}
   - component: {fileID: 1505929007}
-  - component: {fileID: 1505929008}
   m_Layer: 0
   m_Name: Main Controller
   m_TagString: Untagged
@@ -1743,7 +1758,7 @@ MonoBehaviour:
   InputController: {fileID: 1505929006}
   CameraController: {fileID: 1319018577}
   TimeController: {fileID: 1505929007}
-  buildingsController: {fileID: 973775708}
+  buildingsController: {fileID: 877432746}
 --- !u!4 &1505929005
 Transform:
   m_ObjectHideFlags: 0
@@ -1785,21 +1800,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playPauseButton: {fileID: 1653248151}
   accelerateButton: {fileID: 658137537}
---- !u!114 &1505929008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1505929003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60d4e2025be897c4c871d3651f8cb02f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Environement: {fileID: 877432744}
-  Paths:
-  - {fileID: 1926044293}
 --- !u!1001 &1589691089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2122,7 +2122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 973775708}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BuildingsController, Assembly-CSharp
         m_MethodName: UpgradeTowerBase
         m_Mode: 5
@@ -2134,7 +2134,7 @@ MonoBehaviour:
           m_StringArgument: Human/
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 973775708}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BuildingsController, Assembly-CSharp
         m_MethodName: UpgradeTowerCore
         m_Mode: 5
@@ -2146,7 +2146,7 @@ MonoBehaviour:
           m_StringArgument: Human/
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 973775708}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BuildingsController, Assembly-CSharp
         m_MethodName: UpgradeTowerHead
         m_Mode: 5
@@ -2349,7 +2349,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 973775708}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BuildingPlacementController, Assembly-CSharp
         m_MethodName: AddBuilding
         m_Mode: 2

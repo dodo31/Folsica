@@ -8,7 +8,7 @@ public class BuildingsController : MonoBehaviour
 {
 	public GridController Grid;
 
-	public Transform Environement;
+	public Transform PlayArea;
 
 	private BuildingController selectedBuilding;
 
@@ -40,7 +40,7 @@ public class BuildingsController : MonoBehaviour
 		GameObject newBuilding = Instantiate<GameObject>(buildingPrefab);
 		Vector3 spawnScreenPosition = Input.mousePosition - new Vector3(0, 20, 0);
 		newBuilding.transform.position = this.PointedPosition(spawnScreenPosition);
-		newBuilding.transform.SetParent(Environement);
+		newBuilding.transform.SetParent(PlayArea);
 
 		BuildingController newBuildingController = newBuilding.GetComponentInParent<BuildingController>();
 		newBuildingController.HighlightAsNeutral();
