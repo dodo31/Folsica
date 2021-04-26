@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Price: 20
-  PowerMultiplicator: 1.3
+  CadenceMultiplicator: 1.3
 --- !u!1001 &7248817317396911052
 PrefabInstance:
   m_ObjectHideFlags: 0

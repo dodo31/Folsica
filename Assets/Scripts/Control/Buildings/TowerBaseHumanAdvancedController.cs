@@ -1,4 +1,4 @@
-public class TowerBaseHumanAdvancedController : TowerBaseController
+public class TowerBaseHumanAdvancedController : TowerBaseHumanController
 {
 	
 }
