@@ -16,7 +16,7 @@ public class EnemiesController : MonoBehaviour
 		enemies = new List<EnemyController>();
 	}
 
-	private void LateUpdate()
+	private void FixedUpdate()
 	{
 		this.SpawnRandomEnemy();
 	}

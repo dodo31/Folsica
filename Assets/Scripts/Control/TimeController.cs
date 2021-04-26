@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 
 public class TimeController : MonoBehaviour
 {
-    public PlayPauseButton playPauseButton;
+	public PlayPauseButton playPauseButton;
 	public AccelerateButton accelerateButton;
-    
+
 	private bool isPlaying;
 	private bool isAccelerated;
 
@@ -18,12 +19,23 @@ public class TimeController : MonoBehaviour
 	{
 		if (isPlaying)
 		{
+			Time.timeScale = 0;
+
 			isPlaying = false;
 			playPauseButton.SetAsPlay();
 			accelerateButton.ToggleInterractable(false);
 		}
 		else
 		{
+			if (isAccelerated)
+			{
+				Time.timeScale = 2;
+			}
+			else
+			{
+				Time.timeScale = 1;
+			}
+
 			isPlaying = true;
 			playPauseButton.SetAsPause();
 			accelerateButton.ToggleInterractable(true);
@@ -34,6 +46,8 @@ public class TimeController : MonoBehaviour
 	{
 		if (isAccelerated)
 		{
+			Time.timeScale = 1;
+
 			isAccelerated = false;
 			accelerateButton.SetAsNormal();
 		}
@@ -41,6 +55,8 @@ public class TimeController : MonoBehaviour
 		{
 			if (isPlaying)
 			{
+				Time.timeScale = 2;
+
 				isAccelerated = true;
 				accelerateButton.SetAsAccelerate();
 			}
