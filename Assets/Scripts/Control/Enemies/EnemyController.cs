@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
+	public float Health = 0;
+
 	public float Velocity = 0.0035f;
 
 	public float AngularVelocity = 0.01f;

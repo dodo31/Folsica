@@ -20,5 +20,10 @@ public abstract class TowerStageController : MonoBehaviour
 		return meshBounds.max.y - meshBounds.min.y;
 	}
 
+	protected Vector3 HostTowerPosition()
+	{
+		return transform.parent.transform.position;
+	}
+
 	public float Height { get => height; set => height = value; }
 }

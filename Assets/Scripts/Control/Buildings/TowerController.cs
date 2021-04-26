@@ -37,6 +37,11 @@ public class TowerController : BuildingController
 		}
 	}
 
+	protected void LateUpdate()
+	{
+
+	}
+
 	public void UpgradeTowerBase(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject basePrefab)
 	{
 		this.TransfertButtonFormat(BuildingUi.SectionBase, upgradeButtonSprite, upgradeButtonBackground);
@@ -58,7 +63,7 @@ public class TowerController : BuildingController
 		this.SetHead(newHeadObject);
 	}
 
-	private void TransfertButtonFormat(StageSection targetStageSection,  Sprite upgradeButtonSprite, Color upgradeButtonBackground)
+	private void TransfertButtonFormat(StageSection targetStageSection, Sprite upgradeButtonSprite, Color upgradeButtonBackground)
 	{
 		if (upgradeButtonSprite != null && !upgradeButtonBackground.Equals(Color.black))
 		{
