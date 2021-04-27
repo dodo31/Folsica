@@ -68,7 +68,7 @@ public class TowerController : BuildingController
 
 			float cadence = this.TotalCadence();
 
-			if (cadence > 0 && currentTime - lastFireTime > cadence)
+			if (cadence > 0 && currentTime - lastFireTime > cadence && this.IsEnemyInRange())
 			{
 				float totalRange = this.TotalRange();
 
@@ -99,6 +99,28 @@ public class TowerController : BuildingController
 				}
 			}
 		}
+	}
+
+	private bool IsEnemyInRange()
+	{
+		bool isEnemyInRange = false;
+
+		float totalRange = this.TotalRange();
+		EnemyController[] enemies = GameObject.FindObjectsOfType<EnemyController>();
+
+		for (int i = 0; i < enemies.Length && !isEnemyInRange; i++)
+		{
+			EnemyController enemy = enemies[i];
+			Vector3 enemyPosition = enemy.transform.position;
+			float enemyDistance = Vector3.Distance(transform.position, enemyPosition);
+
+			if (enemyDistance < totalRange)
+			{
+				isEnemyInRange = true;
+			}
+		}
+
+		return isEnemyInRange;
 	}
 
 	private float TotalPowerMultiplicator()
