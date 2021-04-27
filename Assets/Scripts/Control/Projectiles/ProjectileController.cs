@@ -7,6 +7,12 @@ public class ProjectileController : MonoBehaviour
 
 	public float Damage = 0;
 
+	public AudioClip LaunchAudio;
+
+	public AudioClip HitAudio;
+
+	private AudioSource audioSource;
+
 	private Vector3 direction;
 
 	private Vector3 emitterPosition;
@@ -14,6 +20,11 @@ public class ProjectileController : MonoBehaviour
 	private float range;
 
 	private float power;
+
+	protected void Awake()
+	{
+		audioSource = this.GetComponent<AudioSource>();
+	}
 
 	public void Emit(Vector3 direction, Vector3 emitterPosition, float range, float powerMultiplicator)
 	{
@@ -23,6 +34,9 @@ public class ProjectileController : MonoBehaviour
 		this.power = Damage * powerMultiplicator;
 
 		transform.position = emitterPosition;
+
+		audioSource.clip = LaunchAudio;
+		audioSource.Play();
 	}
 
 	protected void LateUpdate()
@@ -53,6 +67,9 @@ public class ProjectileController : MonoBehaviour
 
 		if (enemy != null)
 		{
+			audioSource.clip = LaunchAudio;
+			audioSource.Play();
+
 			enemy.HandleDamage(power);
 			Destroy(gameObject);
 		}

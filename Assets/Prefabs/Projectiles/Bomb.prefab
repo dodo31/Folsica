@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6723394658333246487}
   - component: {fileID: -6150568285911366345}
   m_Layer: 0
-  m_Name: Bumb
+  m_Name: Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,6 +111,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 0.16666667
   Damage: 20
+  LaunchAudio: {fileID: 8300000, guid: cd500fe521db554458f53366c5cd184c, type: 3}
+  HitAudio: {fileID: 8300000, guid: 516e2d12a51ff654888bd540205bb073, type: 3}
 --- !u!54 &-6150568285911366345
 Rigidbody:
   m_ObjectHideFlags: 0

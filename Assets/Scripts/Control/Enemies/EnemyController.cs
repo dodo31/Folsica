@@ -13,7 +13,12 @@ public class EnemyController : MonoBehaviour
 
 	public float AngularVelocity = 0.01f;
 
+	public AudioClip SpawnAudio;
+	public AudioClip DeathAudio;
+
 	public event Action<EnemyController> OnReachedTarget;
+
+	private AudioSource audioSource;
 
 	private Vector3 lastPosition;
 
@@ -27,6 +32,8 @@ public class EnemyController : MonoBehaviour
 
 	private void Awake()
 	{
+		audioSource = this.GetComponent<AudioSource>();
+
 		lastPosition = Vector3.zero;
 		stepPoints = new StepPoint[0];
 		stepPointToReach = null;
@@ -46,6 +53,9 @@ public class EnemyController : MonoBehaviour
 		stepPointToReach = stepPoints[1];
 		Vector3 deltaToStep = stepPointToReach.Position - transform.position;
 		lastPosition = transform.position - deltaToStep.normalized * Velocity;
+
+		audioSource.clip = SpawnAudio;
+		audioSource.Play();
 	}
 
 	protected void FixedUpdate()
@@ -109,6 +119,8 @@ public class EnemyController : MonoBehaviour
 		}
 		else
 		{
+			audioSource.clip = DeathAudio;
+			audioSource.Play();
 			Destroy(gameObject);
 		}
 	}

@@ -111,6 +111,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 0.16666667
   Damage: 40
+  LaunchAudio: {fileID: 8300000, guid: c8bbacd86d6f33e4e8d7d43c6b68a54f, type: 3}
+  HitAudio: {fileID: 8300000, guid: c0312ab7090369c43be7d754cabfe8f5, type: 3}
 --- !u!54 &3860514954354346645
 Rigidbody:
   m_ObjectHideFlags: 0
