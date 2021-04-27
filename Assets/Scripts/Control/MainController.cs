@@ -30,7 +30,13 @@ public class MainController : MonoBehaviour
 			BuildingsController.UnselectAllBuildingMenues();
 		};
 
-		InputController.OnRightClick += this.BuildingsController.AddBuilding;
+		InputController.OnRightClick += () =>
+		{
+			if (!BuildingsController.IsMovingObject())
+			{
+				this.BuildingsController.AddBuilding();
+			}
+		};
 
 		InputController.OnObjectHovered += this.HoveredObjectLogger;
 		InputController.OnObjectClicked += this.DispatchObjectClicked;
@@ -63,21 +69,17 @@ public class MainController : MonoBehaviour
 		{
 		case "Building":
 			BuildingController buildingController = clickedObject.GetComponentInParent<BuildingController>();
-
-			if (BuildingsController.IsMovingObject())
-			{
-				buildingController.HideHighlight();
-				BuildingsController.EndMove();
-			}
-
 			BuildingsController.SelectBuildingMenu(buildingController);
 			break;
 		case "Ground":
 			this.ManageBackgroundClicking();
 			break;
-		case "Grid":
-			this.ManageBackgroundClicking();
-			break;
+		}
+
+		if (BuildingsController.IsMovingObject())
+		{
+			BuildingsController.SelectBuildingMenu(BuildingsController.HeldBuilding);
+			BuildingsController.EndMove();
 		}
 	}
 

@@ -158,11 +158,23 @@ public class InputController : MonoBehaviour
 	private GameObject HitObject()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		bool hasHit = Physics.Raycast(ray, out RaycastHit hit);
+		RaycastHit[] hits = Physics.RaycastAll(ray);
 
-		if (hasHit)
+		if (hits.Length > 0)
 		{
-			return hit.transform.gameObject;
+			GameObject firstEligibleObject = null;
+
+			for (int i = 0; i < hits.Length && firstEligibleObject == null; i++)
+			{
+				RaycastHit hit = hits[i];
+
+				if (hit.transform.tag != "Enemy")
+				{
+					firstEligibleObject = hit.transform.gameObject;
+				}
+			}
+
+			return firstEligibleObject;
 		}
 		else
 		{

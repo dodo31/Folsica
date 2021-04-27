@@ -49,8 +49,6 @@ public class BuildingsController : MonoBehaviour
 		newBuildingObject.transform.position = this.PointedPosition(spawnScreenPosition);
 		newBuildingObject.transform.SetParent(PlayArea);
 
-		Debug.Log(newBuildingObject.transform.position);
-
 		BuildingController newBuilding = newBuildingObject.GetComponentInParent<BuildingController>();
 		newBuilding.HighlightAsNeutral();
 		this.UnselectAllBuildingMenues();
@@ -95,7 +93,7 @@ public class BuildingsController : MonoBehaviour
 	public void StartMove(GameObject objectToMove)
 	{
 		heldBuilding = objectToMove.GetComponentInParent<BuildingController>();
-		heldBuilding.IsOnMove = false;
+		heldBuilding.IsOnMove = true;
 
 		Vector3 objectScreenPosition = Camera.main.WorldToScreenPoint(heldBuilding.transform.position);
 		Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
@@ -186,7 +184,7 @@ public class BuildingsController : MonoBehaviour
 		if (hits.Length > 0)
 		{
 			RaycastHit matchingHit = Array.Find(hits, (RaycastHit hit) =>
-				hit.transform == Grid.transform
+				hit.transform.tag == "Ground"
 			);
 
 			if (matchingHit.transform != null)

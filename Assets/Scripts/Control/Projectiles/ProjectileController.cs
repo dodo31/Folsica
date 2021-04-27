@@ -39,7 +39,7 @@ public class ProjectileController : MonoBehaviour
 		audioSource.Play();
 	}
 
-	protected void LateUpdate()
+	protected void FixedUpdate()
 	{
 		float distanceFromEmitter = Vector3.Distance(transform.position, emitterPosition);
 

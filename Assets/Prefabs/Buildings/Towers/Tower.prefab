@@ -562,11 +562,10 @@ MonoBehaviour:
     ValidColor: {r: 0, g: 1, b: 0, a: 0.49803922}
     InvalidColor: {r: 1, g: 0, b: 0, a: 0.49803922}
   HighlightMaterialPrefab: {fileID: 2100000, guid: c5f34a7629217e84ea3efcab1f61a2fc, type: 2}
-  RowCount: 2
-  ColCount: 2
+  RowCount: 1
+  ColCount: 1
   FootprintRows:
-  - cells: 0100
-  - cells: 0001
+  - cells: 01
   BuildingUi: {fileID: 2175134873586937121}
   RotationSpeed: 0.1
   Base: {fileID: 0}
@@ -3903,7 +3902,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7668262607066063638, guid: e847cb38a14b9d34aa7701bbedde1df3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7668262607066063639, guid: e847cb38a14b9d34aa7701bbedde1df3, type: 3}
       propertyPath: m_Pivot.x
@@ -4699,7 +4698,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7668262607066063638, guid: e847cb38a14b9d34aa7701bbedde1df3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7668262607066063639, guid: e847cb38a14b9d34aa7701bbedde1df3, type: 3}
       propertyPath: m_Pivot.x
@@ -5771,7 +5770,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7668262607066063638, guid: e847cb38a14b9d34aa7701bbedde1df3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7668262607066063639, guid: e847cb38a14b9d34aa7701bbedde1df3, type: 3}
       propertyPath: m_Pivot.x
