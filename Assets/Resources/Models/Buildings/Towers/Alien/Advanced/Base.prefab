@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Price: 50
+  Race: 2
   CadenceMultiplicator: 1.6
 --- !u!1001 &4067282189977626595
 PrefabInstance:

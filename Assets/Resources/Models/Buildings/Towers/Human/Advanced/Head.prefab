@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Price: 100
+  Race: 1
   Cadence: 2
   PowerMultiplicator: 3
 --- !u!1001 &4778695034858261221

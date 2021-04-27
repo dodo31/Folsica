@@ -13,6 +13,8 @@ public class BuildingsController : MonoBehaviour
 
 	public NeutralStages NeutralStages;
 
+	public EconomyController EconomyController;
+
 	private BuildingController selectedBuilding;
 
 	private BuildingController heldBuilding;
@@ -51,13 +53,12 @@ public class BuildingsController : MonoBehaviour
 
 		if (newBuilding is TowerController newTower)
 		{
-			// newBuilding.OnBaseUpgradeRequired += this.UpgradeTowerBase;
-
 			newTower.SellButton.onClick.AddListener(() =>
 			{
 				this.SellTower(newTower);
 			});
 
+			newTower.OnUpgradeConsummed += this.BuyStage;
 			newTower.UpgradeTowerBase(null, Color.black, NeutralStages.Base);
 			newTower.UpgradeTowerCore(null, Color.black, NeutralStages.Core);
 			newTower.UpgradeTowerHead(null, Color.black, NeutralStages.Head);
@@ -65,24 +66,19 @@ public class BuildingsController : MonoBehaviour
 
 		selectedBuilding = newBuilding;
 
-
 		this.StartMove(newBuildingObject);
 	}
 
-	// private GameObject LoadTowerStage(string stageLocalPath)
-	// {
-	// 	GameObject baseStagePrefab = Resources.Load<GameObject>(TOWERS_PATH + stageLocalPath);
-	// 	GameObject baseStage = Instantiate<GameObject>(baseStagePrefab);
-
-	// 	baseStage.transform.position = Vector3.zero;
-	// 	baseStage.transform.localScale = Vector3.one;
-
-	// 	return baseStage;
-	// }
+	private void BuyStage(float stageCost, Race stageRace)
+	{
+		EconomyController.SpendResource(stageCost, stageRace);
+	}
 
 	private void SellTower(TowerController towerToRemove)
 	{
-		// Retribute
+		EconomyController.GainResource(towerToRemove.TotalHumanResourceValue(), Race.HUMAN);
+		EconomyController.GainResource(towerToRemove.TotalAlienResourceValue(), Race.ALIEN);
+		EconomyController.GainResource(towerToRemove.TotalRobotResourceValue(), Race.ROBOT);
 		this.RemoveBuilding(towerToRemove);
 	}
 
@@ -95,6 +91,7 @@ public class BuildingsController : MonoBehaviour
 	public void StartMove(GameObject objectToMove)
 	{
 		heldBuilding = objectToMove.GetComponentInParent<BuildingController>();
+		heldBuilding.IsOnMove = false;
 
 		Vector3 objectScreenPosition = Camera.main.WorldToScreenPoint(heldBuilding.transform.position);
 		Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
@@ -132,6 +129,7 @@ public class BuildingsController : MonoBehaviour
 	public void EndMove()
 	{
 		Vector3 objectGridPosition = Grid.FreePositionToGridPosition(heldBuilding.transform.position);
+		heldBuilding.IsOnMove = false;
 
 		if (!this.IsBuildingColliding(heldBuilding))
 		{

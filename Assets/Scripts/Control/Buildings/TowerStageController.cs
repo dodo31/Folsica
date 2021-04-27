@@ -5,6 +5,8 @@ public abstract class TowerStageController : MonoBehaviour
 {
 	public int Price = 0;
 
+	public Race Race;
+
 	private MeshFilter meshFilter;
 	private float height;
 

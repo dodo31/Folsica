@@ -17,12 +17,16 @@ public class TowerController : BuildingController
 
 	public Text SellAmout;
 
+	public event Action<float, Race> OnUpgradeConsummed;
+
 	private float lastFireTime;
 
 	private float currentAngle;
 	private Vector3 targetDirection;
 
 	private GeometryHelper geometryHelper;
+
+	private Economy economy;
 
 	protected void Awake()
 	{
@@ -42,6 +46,8 @@ public class TowerController : BuildingController
 		targetDirection = Vector3.positiveInfinity;
 
 		geometryHelper = new GeometryHelper();
+
+		economy = Economy.GetInstance();
 	}
 
 	private void BindUpgradesToButtons(GameObject stagePanel, Action<Sprite, Color, GameObject> actionToBind)
@@ -56,38 +62,41 @@ public class TowerController : BuildingController
 
 	protected void LateUpdate()
 	{
-		float currentTime = Time.time;
-
-		float cadence = this.TotalCadence();
-
-		if (cadence > 0 && currentTime - lastFireTime > cadence)
+		if (!isOnMove && this.IsComplete())
 		{
-			float totalRange = this.TotalRange();
+			float currentTime = Time.time;
 
-			if (Core.ProjectilePrefab != null)
+			float cadence = this.TotalCadence();
+
+			if (cadence > 0 && currentTime - lastFireTime > cadence)
 			{
-				this.Fire(totalRange);
+				float totalRange = this.TotalRange();
+
+				if (Core.ProjectilePrefab != null)
+				{
+					this.Fire(totalRange);
+				}
+
+				targetDirection = Head.SelectTargetDirection(totalRange);
+
+				if (targetDirection.x != float.PositiveInfinity)
+				{
+					this.RefreshGunDirection(targetDirection);
+				}
+
+				lastFireTime = currentTime;
 			}
-
-			targetDirection = Head.SelectTargetDirection(totalRange);
-
-			if (targetDirection.x != float.PositiveInfinity)
+			else
 			{
-				this.RefreshGunDirection(targetDirection);
-			}
+				if (targetDirection.x == float.PositiveInfinity)
+				{
+					targetDirection = Head.SelectTargetDirection(this.TotalRange());
+				}
 
-			lastFireTime = currentTime;
-		}
-		else
-		{
-			if (targetDirection.x == float.PositiveInfinity)
-			{
-				targetDirection = Head.SelectTargetDirection(this.TotalRange());
-			}
-
-			if (targetDirection.x != float.PositiveInfinity)
-			{
-				this.RefreshGunDirection(targetDirection);
+				if (targetDirection.x != float.PositiveInfinity)
+				{
+					this.RefreshGunDirection(targetDirection);
+				}
 			}
 		}
 	}
@@ -165,31 +174,59 @@ public class TowerController : BuildingController
 
 	public void UpgradeTowerBase(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject basePrefab)
 	{
-		this.TransfertButtonFormat(BuildingUi.SectionBase, upgradeButtonSprite, upgradeButtonBackground);
-		GameObject newBaseObject = Instantiate<GameObject>(basePrefab);
-		this.SetBase(newBaseObject);
-		this.RefreshSellPrice();
+		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, basePrefab, this.SetBase);
 	}
 
 	public void UpgradeTowerCore(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject corePrefab)
 	{
-		this.TransfertButtonFormat(BuildingUi.SectionCore, upgradeButtonSprite, upgradeButtonBackground);
-		GameObject newCoreObject = Instantiate<GameObject>(corePrefab);
-		this.SetCore(newCoreObject);
-		this.RefreshSellPrice();
+		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, corePrefab, this.SetCore);
 	}
 
 	public void UpgradeTowerHead(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject headPrefab)
 	{
-		this.TransfertButtonFormat(BuildingUi.SectionHead, upgradeButtonSprite, upgradeButtonBackground);
-		GameObject newHeadObject = Instantiate<GameObject>(headPrefab);
-		this.SetHead(newHeadObject);
-		this.RefreshSellPrice();
+		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, headPrefab, this.SetHead);
+	}
+
+	private void UpgradeStage(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject stagePrefab, Action<GameObject> stageSetter)
+	{
+		if (this.CanUpgrade(stagePrefab))
+		{
+			this.TransfertButtonFormat(BuildingUi.SectionHead, upgradeButtonSprite, upgradeButtonBackground);
+			GameObject newStageObject = Instantiate<GameObject>(stagePrefab);
+			stageSetter(newStageObject);
+			this.RefreshSellPrice();
+			this.PropagateUpgradeCost(stagePrefab);
+		}
+	}
+
+	private bool CanUpgrade(GameObject stagePrefab)
+	{
+		TowerStageController stage = stagePrefab.GetComponent<TowerStageController>();
+
+		switch (stage.Race)
+		{
+		case Race.HUMAN:
+			return stage.Price <= economy.HumanResourceAmout;
+		case Race.ALIEN:
+			return stage.Price <= economy.AlienResourceAmout;
+		case Race.ROBOT:
+			return stage.Price <= economy.RobotResourceAmout;
+		case Race.NEUTRAL:
+			return true;
+		}
+
+		return false;
 	}
 
 	private void RefreshSellPrice()
 	{
 		SellAmout.text = this.TotalPrice() + " $";
+	}
+
+	private void PropagateUpgradeCost(GameObject stagePrefab)
+	{
+		TowerStageController stage = stagePrefab.GetComponent<TowerStageController>();
+		OnUpgradeConsummed.Invoke(stage.Price, stage.Race);
 	}
 
 	private float TotalPrice()
@@ -198,6 +235,33 @@ public class TowerController : BuildingController
 		float corePrice = Core != null ? Core.Price : 0;
 		float headPrice = Head != null ? Head.Price : 0;
 		return basePrice + corePrice + headPrice;
+	}
+
+	public float TotalHumanResourceValue()
+	{
+		float totalHumanResourceAmount = 0;
+		totalHumanResourceAmount += (Base.Race == Race.HUMAN ? Base.Price : 0);
+		totalHumanResourceAmount += (Core.Race == Race.HUMAN ? Core.Price : 0);
+		totalHumanResourceAmount += (Head.Race == Race.HUMAN ? Head.Price : 0);
+		return totalHumanResourceAmount;
+	}
+
+	public float TotalAlienResourceValue()
+	{
+		float totalAlienResourceAmount = 0;
+		totalAlienResourceAmount += (Base.Race == Race.ALIEN ? Base.Price : 0);
+		totalAlienResourceAmount += (Core.Race == Race.ALIEN ? Core.Price : 0);
+		totalAlienResourceAmount += (Head.Race == Race.ALIEN ? Head.Price : 0);
+		return totalAlienResourceAmount;
+	}
+
+	public float TotalRobotResourceValue()
+	{
+		float totalRobotResourceAmount = 0;
+		totalRobotResourceAmount += (Base.Race == Race.ROBOT ? Base.Price : 0);
+		totalRobotResourceAmount += (Core.Race == Race.ROBOT ? Core.Price : 0);
+		totalRobotResourceAmount += (Head.Race == Race.ROBOT ? Head.Price : 0);
+		return totalRobotResourceAmount;
 	}
 
 	private void TransfertButtonFormat(StageSection targetStageSection, Sprite upgradeButtonSprite, Color upgradeButtonBackground)
@@ -241,7 +305,7 @@ public class TowerController : BuildingController
 
 	private void RelocateStages()
 	{
-		if (Base != null && Core != null && Head != null)
+		if (this.IsComplete())
 		{
 			Base.transform.localPosition = Vector3.zero;
 
@@ -280,5 +344,10 @@ public class TowerController : BuildingController
 		}
 
 		return position;
+	}
+
+	private bool IsComplete()
+	{
+		return Base != null && Core != null && Head != null;
 	}
 }

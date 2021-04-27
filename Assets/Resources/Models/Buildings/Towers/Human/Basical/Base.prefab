@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Price: 20
+  Race: 1
   PowerMultiplicator: 1.3
 --- !u!1001 &4158904943105334845
 PrefabInstance:

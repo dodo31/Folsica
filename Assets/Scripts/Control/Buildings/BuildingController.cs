@@ -16,8 +16,13 @@ public abstract class BuildingController : HighlightableController
 
 	public BuildingUi BuildingUi;
 
+	protected bool isOnMove;
+
 	public void ToggleMenu(bool showMenu)
 	{
 		BuildingUi.ToggleMenu(showMenu);
+		isOnMove = false;
 	}
+
+	public bool IsOnMove { get => isOnMove; set => isOnMove = value; }
 }
