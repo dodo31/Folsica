@@ -28,10 +28,9 @@ public class TerrainGenerationController : MonoBehaviour
 			{
 				float cursorY = cursorStartY + y * tileSize;
 
-                Vector3 cursorPosition = new Vector3(cursorX, 0, cursorY);
+				Vector3 cursorPosition = new Vector3(cursorX, 0, cursorY);
 
 				int tileId = map.Disposition[y, sideCount - x - 1];
-                // int tileId = map.Disposition[y, x];
 
 				if (tileId > 0)
 				{
@@ -39,17 +38,24 @@ public class TerrainGenerationController : MonoBehaviour
 
 					GameObject tileObjectPrefab = Resources.Load<GameObject>(tilePath);
 					GameObject tileObject = Instantiate<GameObject>(tileObjectPrefab);
-                    // tileObject.transform.Rotate(Vector3.up, 90, Space.World);
+					// tileObject.transform.Rotate(Vector3.up, 90, Space.World);
 
-                    MeshFilter tileFilter = tileObject.GetComponentInChildren<MeshFilter>();
-                    tileFilter.sharedMesh.RecalculateBounds();
-                    Bounds tileBounds = tileFilter.sharedMesh.bounds;
+					MeshFilter tileFilter = tileObject.GetComponentInChildren<MeshFilter>();
+					tileFilter.sharedMesh.RecalculateBounds();
+					Bounds tileBounds = tileFilter.sharedMesh.bounds;
 
 					tileObject.name = tileId.ToString();
-                    tileObject.transform.position = cursorPosition - tileBounds.min - new Vector3(0, 4.3f, 0);
-                    tileObject.transform.SetParent(transform);
+					tileObject.transform.position = cursorPosition - tileBounds.min - new Vector3(0, 4.3f, 0);
+					tileObject.transform.SetParent(transform);
+
+					if (tileId == 123)
+					{
+						tileObject.transform.Translate(0, -0.1f, 0);
+					}
 				}
 			}
 		}
+
+		transform.Rotate(0, -90, 0, Space.Self);
 	}
 }
