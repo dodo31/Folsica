@@ -36,7 +36,7 @@ public class CameraController : MonoBehaviour
 		float newPosXClamped = Mathf.Clamp(newPosX, MoveConfig.rangeX.x, MoveConfig.rangeX.y);
 		float newPosYClamped = Mathf.Clamp(newPosY, MoveConfig.rangeY.x, MoveConfig.rangeY.y);
 
-		this.transform.position = new Vector3(newPosXClamped, newPosYClamped, newPosYClamped);
+		this.transform.position = new Vector3(newPosXClamped, newPosYClamped, this.transform.position.y);
 	}
 
 	public void SetZoom(int direction)

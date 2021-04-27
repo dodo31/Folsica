@@ -2295,7 +2295,6 @@ MonoBehaviour:
   PlayArea: {fileID: 877432744}
   Paths:
   - {fileID: 1926044293}
-  GlobalHealthController: {fileID: 0}
 --- !u!114 &877432746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2315,6 +2314,7 @@ MonoBehaviour:
     Core: {fileID: 374537238328082457, guid: bdb442b1eff41f84cbfe70812c6b55a7, type: 3}
     Head: {fileID: 8512407720918923443, guid: 71f7909575a82e74f84a992bfddc672a, type: 3}
   EconomyController: {fileID: 1505929008}
+  BuildingPrefab: {fileID: 5694735442436494988, guid: 3e2e3cdda129f4249ba2a5df689162fc, type: 3}
 --- !u!1 &879108930
 GameObject:
   m_ObjectHideFlags: 0
@@ -2448,7 +2448,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 76.8, y: 1, z: 76.8}
+  m_Size: {x: 768, y: 1, z: 768}
   m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!1 &894082004
 GameObject:
@@ -2730,7 +2730,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -20}
+  m_LocalPosition: {x: 0, y: 0, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9109594}
@@ -4793,7 +4793,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1886790576
 RectTransform:
   m_ObjectHideFlags: 0

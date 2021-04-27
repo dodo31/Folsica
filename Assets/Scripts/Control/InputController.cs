@@ -13,6 +13,8 @@ public class InputController : MonoBehaviour
 	public event Action<Vector2> OnBorderHit;
 	public event Action<int> OnZoom;
 
+	public event Action OnRightClick;
+
 	public event Action<GameObject> OnObjectHovered;
 
 	public event Action<GameObject> OnObjectClicked;
@@ -98,7 +100,8 @@ public class InputController : MonoBehaviour
 
 			if (hitObject)
 			{
-				if (Input.GetMouseButtonDown(0))
+				if (Input.GetMouseButtonDown(0)
+				 || Input.GetMouseButtonDown(1))
 				{
 					activeObject = hitObject;
 					initialMousePosition = Input.mousePosition;
@@ -123,10 +126,18 @@ public class InputController : MonoBehaviour
 			}
 			else
 			{
-				if (distanceFromClick >= eventSystem.pixelDragThreshold)
+				if (Input.GetMouseButtonUp(1))
 				{
-					OnObjectBeginDrag.Invoke(activeObject);
-					mouseState = MouseState.DRAGGING;
+					OnRightClick.Invoke();
+					mouseState = MouseState.INACTIVE;
+				}
+				else
+				{
+					if (distanceFromClick >= eventSystem.pixelDragThreshold)
+					{
+						OnObjectBeginDrag.Invoke(activeObject);
+						mouseState = MouseState.DRAGGING;
+					}
 				}
 			}
 			break;

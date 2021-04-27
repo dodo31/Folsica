@@ -30,6 +30,8 @@ public class MainController : MonoBehaviour
 			BuildingsController.UnselectAllBuildingMenues();
 		};
 
+		InputController.OnRightClick += this.BuildingsController.AddBuilding;
+
 		InputController.OnObjectHovered += this.HoveredObjectLogger;
 		InputController.OnObjectClicked += this.DispatchObjectClicked;
 		InputController.OnObjectBeginDrag += this.DispatchBeginDrag;

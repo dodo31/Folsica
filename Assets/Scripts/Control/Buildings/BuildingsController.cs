@@ -15,6 +15,8 @@ public class BuildingsController : MonoBehaviour
 
 	public EconomyController EconomyController;
 
+	public GameObject BuildingPrefab;
+
 	private BuildingController selectedBuilding;
 
 	private BuildingController heldBuilding;
@@ -38,14 +40,16 @@ public class BuildingsController : MonoBehaviour
 		buildingGridPositions = new Dictionary<BuildingController, Vector3>();
 	}
 
-	public void AddBuilding(GameObject buildingPrefab)
+	public void AddBuilding()
 	{
 		Grid.gameObject.SetActive(true);
 
-		GameObject newBuildingObject = Instantiate<GameObject>(buildingPrefab);
+		GameObject newBuildingObject = Instantiate<GameObject>(BuildingPrefab);
 		Vector3 spawnScreenPosition = Input.mousePosition - new Vector3(0, 20, 0);
 		newBuildingObject.transform.position = this.PointedPosition(spawnScreenPosition);
 		newBuildingObject.transform.SetParent(PlayArea);
+
+		Debug.Log(newBuildingObject.transform.position);
 
 		BuildingController newBuilding = newBuildingObject.GetComponentInParent<BuildingController>();
 		newBuilding.HighlightAsNeutral();

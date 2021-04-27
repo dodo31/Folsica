@@ -10,8 +10,6 @@ public class EnemiesController : MonoBehaviour
 
 	public PathController[] Paths;
 
-	public GlobalHealthController GlobalHealthController;
-
 	private List<EnemyController> enemies;
 
 	public event Action<int> OnNewWave;
