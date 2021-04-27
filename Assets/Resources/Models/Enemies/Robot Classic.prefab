@@ -733,8 +733,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 50
-  Velocity: 0.08
-  AngularVelocity: 0.1
+  Velocity: 0.020833336
+  AngularVelocity: 0.05
 --- !u!54 &8054702794951782584
 Rigidbody:
   m_ObjectHideFlags: 0

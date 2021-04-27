@@ -211,6 +211,8 @@ public class BuildingsController : MonoBehaviour
 		building.HighlightAsSelected();
 		building.ToggleMenu(true);
 		selectedBuilding = building;
+
+		selectedBuilding.BuildingUi.transform.localScale = Vector3.one * Camera.main.orthographicSize * 0.002f;
 	}
 
 	public void UnselectAllBuildingMenues()

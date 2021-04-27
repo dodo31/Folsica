@@ -10,7 +10,7 @@ public class InputController : MonoBehaviour
 
 	public float BordersContactMarginRate = 5;
 
-	public event Action<float> OnBorderHit;
+	public event Action<Vector2> OnBorderHit;
 	public event Action<int> OnZoom;
 
 	public event Action<GameObject> OnObjectHovered;
@@ -50,22 +50,35 @@ public class InputController : MonoBehaviour
 	{
 		Vector2 mousePosition = Input.mousePosition;
 
+		float deltaX = 0;
+		float deltaY = 0;
+
 		if (mousePosition.x <= bordersContactMargin)
 		{
-			float mouseDelta = mousePosition.x - bordersContactMargin;
-			this.TriggerBorderHitting(mouseDelta);
+			deltaX = mousePosition.x - bordersContactMargin;
 		}
 		else if (mousePosition.x >= Screen.width - bordersContactMargin)
 		{
-			float mouseDelta = -((Screen.width - mousePosition.x) - bordersContactMargin);
-			this.TriggerBorderHitting(mouseDelta);
+			deltaX = -((Screen.width - mousePosition.x) - bordersContactMargin);
 		}
+
+		if (mousePosition.y <= bordersContactMargin)
+		{
+			deltaY = mousePosition.y - bordersContactMargin;
+		}
+		else if (mousePosition.y >= Screen.height - bordersContactMargin)
+		{
+			deltaY = -((Screen.height - mousePosition.y) - bordersContactMargin);
+		}
+
+		this.TriggerBorderHitting(deltaX, deltaY);
 	}
 
-	private void TriggerBorderHitting(float mouseDelta)
+	private void TriggerBorderHitting(float mouseDeltaX, float mouseDeltaY)
 	{
-		float mouseDeltaRate = mouseDelta / Screen.width;
-		OnBorderHit.Invoke(mouseDeltaRate);
+		float mouseDeltaRateX = mouseDeltaX / Screen.width;
+		float mouseDeltaRateY = mouseDeltaY / Screen.height;
+		OnBorderHit.Invoke(new Vector2(mouseDeltaRateX, mouseDeltaRateY));
 	}
 
 	protected void ManageZoom()

@@ -11,14 +11,51 @@ public class EnemiesController : MonoBehaviour
 
 	private List<EnemyController> enemies;
 
+	private int frameIndex;
+
+	private Waves waves;
+
+	private List<int> frames;
+
 	protected void Start()
 	{
 		enemies = new List<EnemyController>();
+
+		waves = new Waves();
+		frameIndex = 0;
+
+		frames = new List<int>(waves.EnemyTimes);
 	}
 
 	private void FixedUpdate()
 	{
-		this.SpawnRandomEnemy();
+		int frameIndexIndex = frames.IndexOf(frameIndex);
+
+		if (frameIndexIndex >= 0)
+		{
+			int enemyId = waves.EnemyPaths[frameIndexIndex];
+
+			switch (enemyId)
+			{
+			case 0:
+				this.SpawRobotClassic();
+				break;
+			case 1:
+				this.SpawRobotHorse();
+				break;
+			case 2:
+				this.SpawRobotHealer();
+				break;
+			case 3:
+				this.SpawRobotCar();
+				break;
+			case 4:
+				this.SpawRobotBoss();
+				break;
+			}
+		}
+
+		frameIndex++;
 	}
 
 	public void SpawnRandomEnemy()
@@ -41,7 +78,7 @@ public class EnemiesController : MonoBehaviour
 		{
 			this.SpawRobotCar();
 		}
-        else if (randomNumber >= 4 && randomNumber < 5)
+		else if (randomNumber >= 4 && randomNumber < 5)
 		{
 			this.SpawRobotBoss();
 		}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Price: 150
-  Range: 60
+  Range: 2.5
   ProjectilePrefab: {fileID: 4945234556522929573, guid: 96bff2e64db80be4ba586981cdeca1b4, type: 3}
 --- !u!1001 &3099530273773443119
 PrefabInstance:

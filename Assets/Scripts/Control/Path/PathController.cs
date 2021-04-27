@@ -78,7 +78,7 @@ public class PathController : MonoBehaviour
 		float stepPosX = Mathf.Cos(randomAngle) * randomDistance;
 		float stepPosY = Mathf.Sin(randomAngle) * randomDistance;
 
-		Vector3 stepPosition = new Vector3(stepPosX, 0, stepPosY);
+		Vector3 stepPosition = new Vector3(stepPosX, 0, stepPosY) + pathPoint.transform.position;
 
 		return new StepPoint(stepPosition);
 	}

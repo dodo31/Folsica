@@ -5,5 +5,6 @@ using UnityEngine;
 public struct InputConfig
 {
 	public float speedFactor;
-	public Vector2 range;
+	public Vector2 rangeX;
+	public Vector2 rangeY;
 }
