@@ -22,7 +22,7 @@ public class EnemiesController : MonoBehaviour
 
 	private List<int> enemyPaths;
 
-	private int curentDay;
+	private int currentDay;
 
 	protected void Start()
 	{
@@ -35,7 +35,7 @@ public class EnemiesController : MonoBehaviour
 		enemyTimes = new List<int>(waves.EnemyTimes);
 		enemyPaths = new List<int>(waves.EnemyPaths);
 
-		curentDay = 1;
+		currentDay = 1;
 	}
 
 	private void FixedUpdate()
@@ -70,8 +70,8 @@ public class EnemiesController : MonoBehaviour
 
 		if (waveTimeIndex >= 0)
 		{
-			OnNewWave.Invoke(curentDay);
-			curentDay++;
+			currentDay++;
+			OnNewWave.Invoke(currentDay);
 		}
 
 		frameIndex++;

@@ -6,6 +6,8 @@ public class TimeController : MonoBehaviour
 	public PlayPauseButton playPauseButton;
 	public AccelerateButton accelerateButton;
 
+	public MusicController MusicController;
+
 	private bool isPlaying;
 	private bool isAccelerated;
 
@@ -24,6 +26,8 @@ public class TimeController : MonoBehaviour
 			isPlaying = false;
 			playPauseButton.SetAsPlay();
 			accelerateButton.ToggleInterractable(false);
+
+			MusicController.ToggleBattery(false);
 		}
 		else
 		{
@@ -39,6 +43,8 @@ public class TimeController : MonoBehaviour
 			isPlaying = true;
 			playPauseButton.SetAsPause();
 			accelerateButton.ToggleInterractable(true);
+
+			MusicController.ToggleBattery(true);
 		}
 	}
 

@@ -45,6 +45,8 @@ public class MainController : MonoBehaviour
 		InputController.OnObjectEndDrag += this.DispatchEndDrag;
 
 		EnemiesController.OnNewWave += HudController.SetDay;
+		EnemiesController.OnNewWave += this.RegisterBestScore;
+
 		EnemiesController.OnEnemyReachedDigger += this.HitDigger;
 	}
 
@@ -128,5 +130,16 @@ public class MainController : MonoBehaviour
 	private void HitDigger(EnemyController soruceEnemy)
 	{
 		GlobalHealthController.DecreaseHealth(soruceEnemy.Health);
+	}
+
+	public void RegisterBestScore(int newDay)
+	{
+		int currentBestScore = PlayerPrefs.GetInt("MOST_SURVIVED_DAYS");
+		int lastDay = newDay - 1;
+
+		if (lastDay > currentBestScore)
+		{
+			PlayerPrefs.SetInt("MOST_SURVIVED_DAYS", lastDay);
+		}
 	}
 }
