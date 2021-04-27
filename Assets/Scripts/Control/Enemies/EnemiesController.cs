@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,29 +12,38 @@ public class EnemiesController : MonoBehaviour
 
 	private List<EnemyController> enemies;
 
+	public event Action<int> OnNewWave;
+
 	private int frameIndex;
 
-	private Waves waves;
+	private List<int> waveTimes;
+	private List<int> enemyTimes;
 
-	private List<int> frames;
+	private List<int> enemyPaths;
+
+	private int curentDay;
 
 	protected void Start()
 	{
 		enemies = new List<EnemyController>();
 
-		waves = new Waves();
+		Waves waves = new Waves();
 		frameIndex = 0;
 
-		frames = new List<int>(waves.EnemyTimes);
+		waveTimes = new List<int>(waves.WaveTimes);
+		enemyTimes = new List<int>(waves.EnemyTimes);
+		enemyPaths = new List<int>(waves.EnemyPaths);
+
+		curentDay = 1;
 	}
 
 	private void FixedUpdate()
 	{
-		int frameIndexIndex = frames.IndexOf(frameIndex);
+		int enemyTimeIndex = enemyTimes.IndexOf(frameIndex);
 
-		if (frameIndexIndex >= 0)
+		if (enemyTimeIndex >= 0)
 		{
-			int enemyId = waves.EnemyPaths[frameIndexIndex];
+			int enemyId = enemyPaths[enemyTimeIndex];
 
 			switch (enemyId)
 			{
@@ -53,6 +63,14 @@ public class EnemiesController : MonoBehaviour
 				this.SpawRobotBoss();
 				break;
 			}
+		}
+
+		int waveTimeIndex = waveTimes.IndexOf(frameIndex);
+
+		if (waveTimeIndex >= 0)
+		{
+			OnNewWave.Invoke(curentDay);
+			curentDay++;
 		}
 
 		frameIndex++;

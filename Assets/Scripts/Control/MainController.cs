@@ -9,11 +9,14 @@ public class MainController : MonoBehaviour
 {
 	public InputController InputController;
 
+	public HudController HudController;
+
 	public CameraController CameraController;
 
 	public TimeController TimeController;
 
 	public BuildingsController buildingsController;
+	public EnemiesController EnemiesController;
 
 	public int tileIndex = 1;
 
@@ -31,6 +34,8 @@ public class MainController : MonoBehaviour
 		InputController.OnObjectBeginDrag += this.DispatchBeginDrag;
 		InputController.OnObjectDragged += this.DispatchDragging;
 		InputController.OnObjectEndDrag += this.DispatchEndDrag;
+
+		EnemiesController.OnNewWave += HudController.SetDay;
 	}
 
 	protected void Update()

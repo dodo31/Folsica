@@ -11,8 +11,9 @@ public class HudController : MonoBehaviour
 	public Text AlienResourceAmount;
 	public Text RobotResourceAmount;
 
-	private Economy economy;
+	public Text CurrentDay;
 
+	private Economy economy;
 
 	private void Awake()
 	{
@@ -37,5 +38,10 @@ public class HudController : MonoBehaviour
 		HumanResourceAmount.text = Mathf.Round(economy.HumanResourceAmout).ToString();
 		AlienResourceAmount.text = Mathf.Round(economy.AlienResourceAmout).ToString();
 		RobotResourceAmount.text = Mathf.Round(economy.RobotResourceAmout).ToString();
+	}
+
+	public void SetDay(int newDay)
+	{
+        CurrentDay.text = newDay.ToString();
 	}
 }
