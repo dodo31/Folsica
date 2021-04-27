@@ -63,6 +63,6 @@ public class HudController : MonoBehaviour
 	{
 		int totalHp = Mathf.FloorToInt(globalHealth.TotalHealth);
 		int remainingHp = Mathf.FloorToInt(globalHealth.RemainingHealth);
-		Health.text = totalHp + " / " + remainingHp;
+		Health.text = remainingHp + " / " + totalHp;
 	}
 }

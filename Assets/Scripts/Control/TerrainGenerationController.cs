@@ -38,7 +38,6 @@ public class TerrainGenerationController : MonoBehaviour
 
 					GameObject tileObjectPrefab = Resources.Load<GameObject>(tilePath);
 					GameObject tileObject = Instantiate<GameObject>(tileObjectPrefab);
-					// tileObject.transform.Rotate(Vector3.up, 90, Space.World);
 
 					MeshFilter tileFilter = tileObject.GetComponentInChildren<MeshFilter>();
 					tileFilter.sharedMesh.RecalculateBounds();
