@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class InputController : MonoBehaviour
 {
-	// public 
+	public Camera MainCamera;
 
 	public float BordersContactMarginRate = 5;
 
@@ -157,20 +157,22 @@ public class InputController : MonoBehaviour
 
 	private GameObject HitObject()
 	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit[] hits = Physics.RaycastAll(ray);
+		Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+		RaycastHit[] hits = Physics.RaycastAll(ray, 100000);
 
 		if (hits.Length > 0)
 		{
 			GameObject firstEligibleObject = null;
+			float minHitDistance = float.PositiveInfinity;
 
-			for (int i = 0; i < hits.Length && firstEligibleObject == null; i++)
+			for (int i = 0; i < hits.Length; i++)
 			{
 				RaycastHit hit = hits[i];
 
-				if (hit.transform.tag != "Enemy")
+				if (hit.transform.tag != "Enemy" && hit.distance < minHitDistance)
 				{
 					firstEligibleObject = hit.transform.gameObject;
+					minHitDistance = hit.distance;
 				}
 			}
 

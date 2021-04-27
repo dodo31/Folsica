@@ -71,6 +71,8 @@ public class MainController : MonoBehaviour
 	{
 		EventSystem eventSystem = EventSystem.current;
 
+		Debug.Log(clickedObject.name);
+
 		switch (clickedObject.tag)
 		{
 		case "Building":

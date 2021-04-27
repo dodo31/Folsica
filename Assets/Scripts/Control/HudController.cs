@@ -86,6 +86,7 @@ public class HudController : MonoBehaviour
 
 	public void FadeOut()
 	{
+		FadeOverlay.gameObject.SetActive(true);
 		isFadingOut = true;
 	}
 }
