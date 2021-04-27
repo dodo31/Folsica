@@ -13,6 +13,8 @@ public class EnemyController : MonoBehaviour
 
 	public float AngularVelocity = 0.01f;
 
+	public event Action<EnemyController> OnReachedTarget;
+
 	private Vector3 lastPosition;
 
 	private StepPoint[] stepPoints;
@@ -92,6 +94,7 @@ public class EnemyController : MonoBehaviour
 
 				if (stepPointToReach == null)
 				{
+					OnReachedTarget.Invoke(this);
 					Destroy(gameObject);
 				}
 			}

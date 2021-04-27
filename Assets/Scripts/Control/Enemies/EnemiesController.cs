@@ -10,9 +10,12 @@ public class EnemiesController : MonoBehaviour
 
 	public PathController[] Paths;
 
+	public GlobalHealthController GlobalHealthController;
+
 	private List<EnemyController> enemies;
 
 	public event Action<int> OnNewWave;
+	public event Action<EnemyController> OnEnemyReachedDigger;
 
 	private int frameIndex;
 
@@ -76,32 +79,6 @@ public class EnemiesController : MonoBehaviour
 		frameIndex++;
 	}
 
-	public void SpawnRandomEnemy()
-	{
-		float randomNumber = UnityEngine.Random.Range(0, 5);
-
-		if (randomNumber < 1)
-		{
-			this.SpawRobotClassic();
-		}
-		else if (randomNumber >= 1 && randomNumber < 2)
-		{
-			this.SpawRobotHorse();
-		}
-		else if (randomNumber >= 2 && randomNumber < 3)
-		{
-			this.SpawRobotHealer();
-		}
-		else if (randomNumber >= 3 && randomNumber < 4)
-		{
-			this.SpawRobotCar();
-		}
-		else if (randomNumber >= 4 && randomNumber < 5)
-		{
-			this.SpawRobotBoss();
-		}
-	}
-
 	public void SpawRobotClassic()
 	{
 		GameObject robotClassicObject = Resources.Load<GameObject>(ENEMIES_PATH + "Robot Classic");
@@ -141,16 +118,11 @@ public class EnemiesController : MonoBehaviour
 
 		EnemyController newEnemy = newEnemyObject.GetComponent<EnemyController>();
 		enemies.Add(newEnemy);
+		newEnemy.OnReachedTarget += OnEnemyReachedDigger.Invoke;
 
-		PathController path = this.SelectRandomPath();
+		PathController path = Paths[0];
 		StepPoint[] stepPoints = path.ComputeStepPoints(newEnemy);
 
 		newEnemy.StartTraveling(stepPoints);
-	}
-
-	private PathController SelectRandomPath()
-	{
-		int randomIndex = UnityEngine.Random.Range(0, Paths.Length);
-		return Paths[randomIndex];
 	}
 }

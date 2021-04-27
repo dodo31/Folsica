@@ -174,24 +174,25 @@ public class TowerController : BuildingController
 
 	public void UpgradeTowerBase(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject basePrefab)
 	{
-		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, basePrefab, this.SetBase);
+		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, basePrefab, BuildingUi.SectionBase, this.SetBase);
 	}
 
 	public void UpgradeTowerCore(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject corePrefab)
 	{
-		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, corePrefab, this.SetCore);
+		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, corePrefab, BuildingUi.SectionCore, this.SetCore);
 	}
 
 	public void UpgradeTowerHead(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject headPrefab)
 	{
-		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, headPrefab, this.SetHead);
+		this.UpgradeStage(upgradeButtonSprite, upgradeButtonBackground, headPrefab, BuildingUi.SectionHead, this.SetHead);
 	}
 
-	private void UpgradeStage(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject stagePrefab, Action<GameObject> stageSetter)
+	private void UpgradeStage(Sprite upgradeButtonSprite, Color upgradeButtonBackground, GameObject stagePrefab,
+		StageSection targetSection, Action<GameObject> stageSetter)
 	{
 		if (this.CanUpgrade(stagePrefab))
 		{
-			this.TransfertButtonFormat(BuildingUi.SectionHead, upgradeButtonSprite, upgradeButtonBackground);
+			this.TransfertButtonFormat(targetSection, upgradeButtonSprite, upgradeButtonBackground);
 			GameObject newStageObject = Instantiate<GameObject>(stagePrefab);
 			stageSetter(newStageObject);
 			this.RefreshSellPrice();

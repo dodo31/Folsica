@@ -10,13 +10,14 @@ public class MainController : MonoBehaviour
 	public InputController InputController;
 
 	public HudController HudController;
-
 	public CameraController CameraController;
 
 	public TimeController TimeController;
 
-	public BuildingsController buildingsController;
+	public BuildingsController BuildingsController;
 	public EnemiesController EnemiesController;
+
+	public GlobalHealthController GlobalHealthController;
 
 	public int tileIndex = 1;
 
@@ -26,7 +27,7 @@ public class MainController : MonoBehaviour
 		InputController.OnZoom += CameraController.SetZoom;
 		InputController.OnZoom += (int direction) =>
 		{
-			buildingsController.UnselectAllBuildingMenues();
+			BuildingsController.UnselectAllBuildingMenues();
 		};
 
 		InputController.OnObjectHovered += this.HoveredObjectLogger;
@@ -36,13 +37,14 @@ public class MainController : MonoBehaviour
 		InputController.OnObjectEndDrag += this.DispatchEndDrag;
 
 		EnemiesController.OnNewWave += HudController.SetDay;
+		EnemiesController.OnEnemyReachedDigger += this.HitDigger;
 	}
 
 	protected void Update()
 	{
-		if (buildingsController.IsMovingObject())
+		if (BuildingsController.IsMovingObject())
 		{
-			buildingsController.refreshPosition();
+			BuildingsController.refreshPosition();
 		}
 	}
 
@@ -60,13 +62,13 @@ public class MainController : MonoBehaviour
 		case "Building":
 			BuildingController buildingController = clickedObject.GetComponentInParent<BuildingController>();
 
-			if (buildingsController.IsMovingObject())
+			if (BuildingsController.IsMovingObject())
 			{
 				buildingController.HideHighlight();
-				buildingsController.EndMove();
+				BuildingsController.EndMove();
 			}
 
-			buildingsController.SelectBuildingMenu(buildingController);
+			BuildingsController.SelectBuildingMenu(buildingController);
 			break;
 		case "Ground":
 			this.ManageBackgroundClicking();
@@ -79,13 +81,13 @@ public class MainController : MonoBehaviour
 
 	private void ManageBackgroundClicking()
 	{
-		if (buildingsController.SelectedBuilding != null)
+		if (BuildingsController.SelectedBuilding != null)
 		{
-			Canvas buildingCanvas = buildingsController.SelectedBuilding.BuildingUi.ContextualUi;
+			Canvas buildingCanvas = BuildingsController.SelectedBuilding.BuildingUi.ContextualUi;
 
 			if (!InputController.IsCanvasPointed(buildingCanvas))
 			{
-				buildingsController.UnselectAllBuildingMenues();
+				BuildingsController.UnselectAllBuildingMenues();
 			}
 		}
 	}
@@ -97,7 +99,7 @@ public class MainController : MonoBehaviour
 		case "Building":
 			BuildingController buildingController = draggedObject.GetComponentInParent<BuildingController>();
 			buildingController.HighlightAsNeutral();
-			buildingsController.StartMove(InputController.ActiveObject);
+			BuildingsController.StartMove(InputController.ActiveObject);
 			break;
 		}
 	}
@@ -114,8 +116,13 @@ public class MainController : MonoBehaviour
 		case "Building":
 			BuildingController buildingController = draggedObject.GetComponentInParent<BuildingController>();
 			buildingController.HideHighlight();
-			buildingsController.EndMove();
+			BuildingsController.EndMove();
 			break;
 		}
+	}
+
+	private void HitDigger(EnemyController soruceEnemy)
+	{
+		GlobalHealthController.DecreaseHealth(soruceEnemy.Health);
 	}
 }
