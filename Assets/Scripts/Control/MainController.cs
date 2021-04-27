@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class MainController : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class MainController : MonoBehaviour
 
 	public GlobalHealthController GlobalHealthController;
 
-	public int tileIndex = 1;
+	private GlobalHealth globalHealth;
 
 	protected void Start()
 	{
@@ -47,6 +48,10 @@ public class MainController : MonoBehaviour
 		EnemiesController.OnNewWave += this.RegisterBestScore;
 
 		EnemiesController.OnEnemyReachedDigger += this.HitDigger;
+
+		HudController.OnFadeOutCompleted += this.LoadMainMenu;
+
+		globalHealth = GlobalHealth.GetInstance();
 	}
 
 	protected void Update()
@@ -129,6 +134,11 @@ public class MainController : MonoBehaviour
 	private void HitDigger(EnemyController soruceEnemy)
 	{
 		GlobalHealthController.DecreaseHealth(soruceEnemy.Health);
+
+		if (globalHealth.RemainingHealth == 0)
+		{
+			HudController.FadeOut();
+		}
 	}
 
 	public void RegisterBestScore(int newDay)
@@ -140,5 +150,10 @@ public class MainController : MonoBehaviour
 		{
 			PlayerPrefs.SetInt("MOST_SURVIVED_DAYS", lastDay);
 		}
+	}
+
+	public void LoadMainMenu()
+	{
+		SceneManager.LoadScene("Main Menu");
 	}
 }

@@ -17,9 +17,14 @@ public class HudController : MonoBehaviour
 
 	public Text Health;
 
+	public Image FadeOverlay;
+
+	public event Action OnFadeOutCompleted;
+
 	private Economy economy;
 	private GlobalHealth globalHealth;
 
+	private bool isFadingOut;
 
 	private void Start()
 	{
@@ -37,6 +42,8 @@ public class HudController : MonoBehaviour
 			this.UpdateHp();
 		};
 		this.UpdateHp();
+
+		isFadingOut = false;
 	}
 
 	private void FixedUpdate()
@@ -45,6 +52,17 @@ public class HudController : MonoBehaviour
 		economy.GainResource(0.1f, Race.ALIEN);
 		economy.GainResource(0.1f, Race.ROBOT);
 		this.UpdateResources();
+
+		if (isFadingOut)
+		{
+			float currentOverlayAlpha = FadeOverlay.color.a;
+			FadeOverlay.color = new Color(0, 0, 0, currentOverlayAlpha + 1 / 150f);
+
+			if (currentOverlayAlpha >= 1)
+			{
+				OnFadeOutCompleted.Invoke();
+			}
+		}
 	}
 
 	private void UpdateResources()
@@ -64,5 +82,10 @@ public class HudController : MonoBehaviour
 		int totalHp = Mathf.FloorToInt(globalHealth.TotalHealth);
 		int remainingHp = Mathf.FloorToInt(globalHealth.RemainingHealth);
 		Health.text = remainingHp + " / " + totalHp;
+	}
+
+	public void FadeOut()
+	{
+		isFadingOut = true;
 	}
 }
