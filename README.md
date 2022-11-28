@@ -1,6 +1,6 @@
 # Folsica
 
-Folsica is a video game developped in 3 days during the Lundum Dare 48, in year 2020.
+Folsica is a video game developped in 3 days during the Lundum Dare 48, in 2020.
 
 You can find the gameplay description here: https://ldjam.com/events/ludum-dare/48/folsica
 
